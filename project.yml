@@ -1,0 +1,25 @@
+name: Sotto
+options:
+  bundleIdPrefix: dev.sotto
+  deploymentTarget:
+    macOS: "26.0"
+targets:
+  Sotto:
+    type: application
+    platform: macOS
+    sources: [Sotto]
+    info:
+      path: Sotto/Info.plist
+      properties:
+        CFBundleDisplayName: Sotto
+        LSUIElement: true
+        NSMicrophoneUsageDescription: Sotto transcribes your side of the meeting on this Mac.
+        NSAudioCaptureUsageDescription: Sotto transcribes the other people on your call. It hears audio only, never your screen.
+        NSSpeechRecognitionUsageDescription: Sotto turns meeting audio into text on this Mac.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sotto.app
+        SWIFT_VERSION: "5.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"

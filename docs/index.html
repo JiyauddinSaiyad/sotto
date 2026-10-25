@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sotto — a meeting copilot in a 0.8 MB download</title>
+<meta name="description" content="A whole meeting copilot in a 0.8 MB download. Live transcript, answers mid-call and notes afterwards, on the Apple Intelligence already built into your Mac. Free and open source.">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f7f9;
+  --border: rgba(15, 18, 34, 0.08);
+  --text: #0f1222;
+  --text-muted: #5b6270;
+
+  /* lifted straight off the logo */
+  --accent: #7163ff;
+  --accent-soft: #efedff;
+  --brand: linear-gradient(110deg, #7163ff, #b65bfa 38%, #df6de0 62%, #f0a4a5 82%, #ffc34f);
+  --success: #22c55e;
+  --rec: #ef4444;
+
+  --glass-bg: rgba(16, 18, 26, 0.84);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-text: rgba(255, 255, 255, 0.92);
+  --glass-muted: rgba(255, 255, 255, 0.55);
+  --glass-blur: 24px;
+
+  --r-pill: 999px;
+  --r-card: 24px;
+  --r-tile: 28px;
+  --r-glass: 16px;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(15,18,34,.06);
+  --shadow-glass: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 17px/1.6 Inter, -apple-system, "SF Pro Text", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
+p { margin: 0; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+.muted { color: var(--text-muted); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,.72); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+.nav .wrap { display: flex; align-items: center; gap: 32px; height: 64px; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 650; font-size: 20px; letter-spacing: -0.03em; }
+.mk { display: block; flex: none; }
+.logo .mk { width: 30px; height: 30px; }
+.nav-links { display: flex; gap: 28px; margin-left: auto; font-size: 15px; color: var(--text-muted); }
+.nav-links a:hover { color: var(--text); }
+.menu-btn { display: none; margin-left: auto; width: 40px; height: 40px; border-radius: 10px; }
+.menu-btn span { display: block; width: 18px; height: 2px; margin: 4px auto; background: var(--text); border-radius: 2px; }
+
+/* ---------- the one CTA ---------- */
+.cta {
+  position: relative; overflow: hidden; display: inline-flex; gap: 8px; align-items: center;
+  padding: 12px 22px; border-radius: var(--r-pill); background: #0f1222; color: #fff; font-weight: 500; font-size: 15px;
+  box-shadow: 0 6px 20px rgba(15,18,34,.25), inset 0 1px 0 rgba(255,255,255,.15);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease); white-space: nowrap;
+}
+.cta:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(15,18,34,.3); }
+.cta svg { width: 18px; height: 18px; fill: currentColor; }
+.cta .i { fill: none; }
+.cta.small { padding: 9px 16px; font-size: 14px; }
+.shimmer {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+  transform: translateX(-100%); animation: shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer { 60%, 100% { transform: translateX(100%); } }
+.ghost { font-size: 15px; font-weight: 500; color: var(--text-muted); padding: 12px 8px; }
+.ghost:hover { color: var(--text); }
+
+/* ---------- hero ---------- */
+.hero { padding: 88px 0 120px; text-align: center; }
+.hero h1 { margin: 0 auto; max-width: 15ch; font-size: clamp(42px, 7vw, 72px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 650; }
+.grad { background: var(--brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .sub { margin: 22px auto 0; max-width: 56ch; font-size: 19px; color: var(--text-muted); }
+.hero .ctas { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+.hero .req { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+
+/* ---------- mac desktop mockup ---------- */
+.mock-wrap { position: relative; margin: 64px auto 0; max-width: 1120px; }
+.mock {
+  position: relative; aspect-ratio: 16 / 10; border-radius: var(--r-tile); overflow: hidden;
+  box-shadow: 0 40px 100px -20px rgba(15,18,34,.35), 0 0 0 1px rgba(15,18,34,.08);
+  background:
+    radial-gradient(at 22% 18%, #e4dcff, transparent 55%),
+    radial-gradient(at 85% 80%, #ffe2c9, transparent 50%),
+    linear-gradient(180deg, #a9c4ff, #e8eeff);
+}
+/* the stage is designed at 1120×700 and scaled to fit, so the fake UI never reflows */
+.stage { position: absolute; left: 0; top: 0; width: 1120px; height: 700px; transform-origin: 0 0; transform: scale(var(--s, 1)); text-align: left; }
+.menubar {
+  height: 26px; display: flex; align-items: center; gap: 18px; padding: 0 16px;
+  background: rgba(255,255,255,.22); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  font-size: 12px; font-weight: 500; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+.menubar b { font-weight: 700; }
+.menubar .right { margin-left: auto; display: flex; gap: 14px; align-items: center; }
+.menubar svg { width: 14px; height: 14px; fill: #fff; }
+
+.call {
+  position: absolute; left: 120px; top: 170px; width: 880px; height: 440px; border-radius: 14px; overflow: hidden;
+  background: #1b1d24; box-shadow: 0 30px 70px rgba(15,18,34,.35), 0 0 0 1px rgba(0,0,0,.4);
+}
+.call .bar { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #24262e; color: rgba(255,255,255,.6); font-size: 12px; }
+.lights { display: flex; gap: 7px; margin-right: 10px; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; height: calc(100% - 32px - 56px); }
+.tile { position: relative; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(160deg, #3a3550, #23252f); }
+.tile:nth-child(2) { background: linear-gradient(160deg, #2f4250, #23252f); }
+.tile:nth-child(3) { background: linear-gradient(160deg, #4a3a3a, #23252f); }
+.tile:nth-child(4) { background: linear-gradient(160deg, #33463a, #23252f); }
+.tile .av { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 22px; color: #fff; background: rgba(255,255,255,.12); }
+.tile .nm { position: absolute; left: 10px; bottom: 8px; font-size: 12px; color: rgba(255,255,255,.85); background: rgba(0,0,0,.35); padding: 2px 8px; border-radius: 6px; }
+.tile.talking { box-shadow: inset 0 0 0 2px #28c840; }
+.controls { height: 56px; display: flex; justify-content: center; align-items: center; gap: 12px; }
+.controls i { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.1); }
+.controls i:last-child { background: #e5484d; width: 52px; border-radius: 18px; }
+
+.dock {
+  position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+  display: flex; align-items: flex-end; gap: 8px; padding: 7px 9px; border-radius: 20px;
+  background: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.4);
+  backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%);
+}
+.dock a { position: relative; width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; transition: transform .2s var(--ease); transform-origin: bottom; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+.dock a svg { width: 26px; height: 26px; }
+.dock a:hover { transform: scale(1.25) translateY(-6px); }
+.dock a:hover + a, .dock a:has(+ a:hover) { transform: scale(1.1) translateY(-3px); }
+.dock .sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(0,0,0,.15); }
+.dock a.on::after { content: ""; position: absolute; bottom: -5px; width: 4px; height: 4px; border-radius: 50%; background: rgba(0,0,0,.55); }
+.dock a[title]:hover::before {
+  content: attr(title); position: absolute; bottom: 62px; padding: 3px 9px; border-radius: 6px; white-space: nowrap;
+  background: rgba(30,30,30,.8); color: #fff; font-size: 11px; font-weight: 500;
+}
+
+/* ---------- the product: dark glass ---------- */
+.glass {
+  background: var(--glass-bg); color: var(--glass-text); border: 1px solid var(--glass-border); box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: rgba(22,24,30,.95); }
+}
+.overlay { position: absolute; left: 50%; top: 44px; width: 560px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; }
+.pill { display: flex; align-items: center; gap: 4px; padding: 5px 6px 5px 10px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; }
+.pill .mk { width: 24px; height: 24px; margin: 0 2px 0 -4px; }
+.pill .pb { padding: 4px 10px; border-radius: var(--r-pill); color: var(--glass-text); }
+.pill .pb:hover { background: rgba(255,255,255,.1); }
+.pill .t { font-family: var(--mono); font-size: 12px; color: var(--glass-muted); padding: 0 8px; font-variant-numeric: tabular-nums; }
+.pill .stop { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--rec); }
+.pill .stop i { width: 9px; height: 9px; border-radius: 2px; background: #fff; }
+.pill .ic { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; color: var(--glass-muted); font-size: 14px; }
+.card { width: 100%; border-radius: var(--r-glass); padding: 12px; font-size: 13.5px; }
+.tabs { display: flex; gap: 2px; font-size: 12px; font-weight: 500; color: var(--glass-muted); margin-bottom: 10px; }
+.tabs span { padding: 3px 10px; border-radius: var(--r-pill); }
+.tabs span.on { background: rgba(255,255,255,.12); color: #fff; }
+.thread { height: 150px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+.msg { max-width: 92%; line-height: 1.5; white-space: pre-line; }
+.msg.me { align-self: flex-end; background: rgba(113,99,255,.4); padding: 5px 11px; border-radius: 12px; font-weight: 500; }
+.msg.ai { color: var(--glass-text); }
+.caret::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: #fff; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.chips { display: flex; gap: 4px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
+.chip { flex: none; padding: 5px 11px; border-radius: var(--r-pill); font-size: 12.5px; font-weight: 500; color: var(--glass-muted); border: 1px solid rgba(255,255,255,.08); transition: background .2s, color .2s; }
+.chip.active, .chip:hover { background: rgba(255,255,255,.12); color: #fff; }
+.ask { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06); color: var(--glass-muted); font-size: 12.5px; }
+.i { width: 1em; height: 1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.125em; }
+.pill .ic .i { width: 15px; height: 15px; }
+.pill .ic:hover, .pill .ic[aria-pressed="true"] { background: rgba(255,255,255,.1); color: #fff; }
+.chip .i { margin-right: 4px; }
+/* same tell as the app: dashed edge = hidden from screen share */
+.overlay.stealth .glass { border: 1.5px dashed rgba(255,255,255,.6); }
+.overlay.collapsed .card { display: none; }
+/* the real app is clear glass with a light tint, so the hero copy is too */
+.overlay .glass { background: rgba(14, 16, 24, .42); backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); text-shadow: 0 1px 2px rgba(0,0,0,.45); }
+kbd { font: 500 11px/1 Inter, sans-serif; padding: 3px 6px; border-radius: 6px; background: rgba(255,255,255,.12); color: #fff; }
+
+
+/* ---------- sections ---------- */
+section.s { padding: 128px 0; }
+section.soft { background: var(--bg-soft); }
+.head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+.head h2 { font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; }
+.head p { margin-top: 16px; color: var(--text-muted); font-size: 18px; }
+.lead strong { color: var(--text); font-weight: 600; }
+.lead { color: var(--text-muted); font-size: 16px; }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.feat { border-radius: var(--r-card); background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow-card); overflow: hidden; display: flex; flex-direction: column; }
+.feat .demo {
+  position: relative; height: 340px; display: grid; place-items: center; padding: 28px;
+  background: radial-gradient(at 30% 20%, #e9e4ff, transparent 60%), radial-gradient(at 80% 90%, #ffeedd, transparent 55%), #f3f4f8;
+}
+.feat .lead { padding: 26px 30px 30px; }
+
+.recpill { position: absolute; top: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: var(--r-pill); font-family: var(--mono); font-size: 13px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--rec); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+.recpill span:last-child { font-family: Inter, sans-serif; font-weight: 500; color: var(--glass-muted); }
+.live { width: 100%; max-width: 420px; margin-top: 52px; border-radius: var(--r-glass); padding: 14px 16px; height: 200px; overflow: hidden; font-size: 13.5px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+  -webkit-mask-image: linear-gradient(transparent, #000 25%); mask-image: linear-gradient(transparent, #000 25%); }
+.line { opacity: 0; transform: translateY(8px); transition: opacity .4s var(--ease), transform .4s var(--ease); line-height: 1.45; }
+.line.in { opacity: 1; transform: none; }
+.line b { font-weight: 600; color: #fff; margin-right: 6px; }
+.line b.them { color: #c9c2ff; }
+
+.keys { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.key {
+  min-width: 52px; height: 48px; padding: 0 12px; display: grid; place-items: center; border-radius: 10px;
+  background: #fff; border: 1px solid #e3e5ea; box-shadow: 0 3px 0 #d4d7dd; font-size: 18px; font-weight: 500; color: var(--text);
+  transition: transform .12s, box-shadow .12s;
+}
+.key small { font-size: 11px; color: var(--text-muted); display: block; line-height: 1; margin-top: 2px; }
+.key.down { transform: translateY(3px); box-shadow: 0 0 0 #d4d7dd; }
+.answer { width: 100%; max-width: 420px; margin-top: 70px; border-radius: var(--r-glass); padding: 14px 16px; font-size: 13.5px; opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease), transform .3s var(--ease); min-height: 150px; }
+.answer.in { opacity: 1; transform: none; }
+.answer .label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--glass-muted); margin-bottom: 8px; }
+.answer .label i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+.answer p { white-space: pre-line; line-height: 1.55; }
+
+/* notes */
+.notes { position: relative; height: 470px; max-width: 980px; margin: 0 auto; }
+.note {
+  position: absolute; top: 20px; left: 50%; width: 380px; padding: 26px 28px; border-radius: 18px; background: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 0 0 1px var(--border), 0 24px 60px -18px rgba(15,18,34,.25);
+  font-size: 14px; color: #2a2e3b; transition: transform .6s var(--ease);
+}
+.note .file { font-family: var(--mono); font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+.note h3 { font-size: 20px; margin-bottom: 10px; }
+.note h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.note ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.note li { display: flex; gap: 10px; align-items: flex-start; }
+.note li .box { flex: none; width: 15px; height: 15px; margin-top: 3px; border: 1.5px solid #c7cad3; border-radius: 4px; }
+.note li .bullet { flex: none; width: 6px; height: 6px; margin-top: 8px; border-radius: 50%; background: var(--accent); }
+.note:nth-child(1) { transform: translateX(-118%) rotate(-4deg); }
+.note:nth-child(2) { transform: translateX(-50%) translateY(-10px); z-index: 2; }
+.note:nth-child(3) { transform: translateX(18%) rotate(4deg); }
+.note:hover { z-index: 3; }
+.notes.in .note:nth-child(1) { transform: translateX(-122%) translateY(14px) rotate(-5deg); }
+.notes.in .note:nth-child(3) { transform: translateX(22%) translateY(14px) rotate(5deg); }
+
+/* bento */
+.bento { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.btile { border-radius: var(--r-tile); background: var(--bg-soft); border: 1px solid var(--border); padding: 36px; display: flex; flex-direction: column; gap: 28px; overflow: hidden; }
+section.soft .btile { background: #fff; }
+.btile .ui { flex: 1; min-height: 260px; display: grid; place-items: center; position: relative; }
+.btile.wide { grid-column: 1 / -1; }
+
+.people { width: 100%; max-width: 400px; background: #fff; border-radius: 16px; box-shadow: var(--shadow-card); border: 1px solid var(--border); padding: 8px; }
+.people header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px 10px; font-size: 13px; font-weight: 600; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--r-pill); background: #e8f8ee; color: #15803d; font-size: 12px; font-weight: 500; }
+.badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+.person { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; font-size: 13px; }
+.person:hover { background: var(--bg-soft); }
+.person .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #fff; }
+.person .who { line-height: 1.25; }
+.person .who small { display: block; color: var(--text-muted); font-size: 11.5px; }
+.person .tag { margin-left: auto; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border); padding: 2px 8px; border-radius: var(--r-pill); }
+
+.split { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.screen { position: relative; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow-card); padding: 14px; }
+.screen .doc i { display: block; height: 7px; border-radius: 4px; background: #e9ebf0; margin-bottom: 7px; }
+.screen .doc i:first-child { width: 55%; height: 10px; background: #d9dcf5; margin-bottom: 12px; }
+.screen .doc i:nth-child(3) { width: 80%; } .screen .doc i:nth-child(5) { width: 65%; }
+.screen .mini { position: absolute; left: 50%; top: 42%; transform: translateX(-50%); width: 72%; padding: 8px 10px; border-radius: 10px; font-size: 10.5px; line-height: 1.4; border: 1.5px dashed rgba(255,255,255,.55); }
+.screen-cap { margin-top: 10px; font-size: 12.5px; font-weight: 500; text-align: center; color: var(--text-muted); }
+.screen-cap b { color: var(--text); }
+
+.desk { position: relative; width: 100%; max-width: 420px; height: 220px; border-radius: 14px; overflow: hidden; background: linear-gradient(180deg, #b9ccff, #eef1ff); border: 1px solid var(--border); touch-action: none; }
+.desk .mini-pill { position: absolute; left: 50%; top: 22px; display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: var(--r-pill); font-size: 12px; font-weight: 500; cursor: grab; transition: opacity .25s var(--ease), scale .25s var(--ease); user-select: none; }
+.desk .mini-pill.dragging { cursor: grabbing; transition: none; }
+.desk .mini-pill.hidden { opacity: 0; scale: .9; pointer-events: none; }
+.desk .mini-pill .mk { width: 18px; height: 18px; margin-left: -6px; }
+.desk .hint { position: absolute; bottom: 12px; width: 100%; text-align: center; font-size: 12px; color: #4a5070; }
+.keyrow { position: absolute; bottom: -8px; right: -8px; display: flex; gap: 6px; }
+.btile .keyrow .key { min-width: 46px; height: 42px; font-size: 16px; }
+.dragui { display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%; }
+.dragui .keys2 { display: flex; gap: 8px; align-items: center; color: var(--text-muted); font-size: 14px; }
+.dragui .keys2 button.key { cursor: pointer; }
+
+.apps { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.app { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 14px; background: #fff; border: 1px solid var(--border); font-weight: 500; font-size: 15px; color: var(--text); transition: transform .2s var(--ease), box-shadow .2s; }
+.app:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+.app svg { width: 22px; height: 22px; }
+
+/* stats */
+.stats { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+.stat { padding: 26px 0; border-bottom: 1px solid var(--border); }
+.stat:first-child { padding-top: 0; } .stat:last-child { border: 0; }
+.stat .n { font-size: clamp(48px, 6vw, 64px); font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat .n span { font-size: .5em; color: var(--text-muted); margin-left: 4px; letter-spacing: 0; }
+.stat .l { margin-top: 10px; font-weight: 600; }
+.stat .p { color: var(--text-muted); font-size: 15px; }
+.tpanel { border-radius: 20px; padding: 20px; height: 420px; display: flex; flex-direction: column; }
+.tpanel header { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.tpanel header .t { margin-left: auto; font-family: var(--mono); font-weight: 500; color: var(--glass-muted); font-size: 12px; }
+.tpanel .scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding-top: 12px; font-size: 14px;
+  -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); }
+.tpanel .stamp { font-family: var(--mono); font-size: 11px; color: var(--glass-muted); margin-right: 8px; }
+
+/* faq */
+.faq { max-width: 760px; margin: 0 auto; }
+.faq details { border-bottom: 1px solid var(--border); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 4px; font-weight: 600; font-size: 18px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-weight: 400; font-size: 24px; color: var(--text-muted); transition: transform .3s var(--ease); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding: 0 4px 24px; color: var(--text-muted); max-width: 62ch; }
+.faq code, .get code { font-family: var(--mono); font-size: .88em; background: var(--bg-soft); padding: 2px 6px; border-radius: 6px; }
+
+/* closing */
+.get { text-align: center; }
+.get h2 { font-size: clamp(34px, 5vw, 56px); line-height: 1.08; max-width: 18ch; margin: 0 auto; letter-spacing: -0.03em; }
+.get .sub { margin: 18px auto 0; max-width: 52ch; color: var(--text-muted); font-size: 18px; }
+.steps { max-width: 560px; margin: 36px auto 32px; padding: 0; list-style: none; counter-reset: s; text-align: left; display: grid; gap: 14px; }
+.steps li { counter-increment: s; display: flex; gap: 14px; align-items: baseline; color: var(--text-muted); }
+.steps li::before { transform: translateY(-1px); }
+.steps li::before { content: counter(s); flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-weight: 600; }
+.steps b { color: var(--text); font-weight: 600; }
+.ctas-c { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
+
+/* footer */
+footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 14px; }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+.fcols h4 { margin: 0 0 14px; font-size: 13px; font-weight: 600; }
+.fcols a { display: block; color: var(--text-muted); padding: 4px 0; }
+.fcols a:hover { color: var(--text); }
+.fbase { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+.fbase a svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* reveal */
+.reveal > * { opacity: 0; transform: translateY(20px); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+.reveal.in > * { opacity: 1; transform: none; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 860px) {
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; padding: 8px 24px 16px; background: #fff; border-bottom: 1px solid var(--border); }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 0; }
+  .menu-btn { display: block; }
+  .nav .cta { display: none; }
+  .two, .bento, .stats { grid-template-columns: minmax(0, 1fr); }
+  .fcols { grid-template-columns: 1fr 1fr; }
+  .notes { height: auto; display: grid; gap: 16px; }
+  .note, .note:nth-child(n), .notes.in .note:nth-child(n) { position: static; width: 100%; transform: none; }
+  section.s { padding: 88px 0; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .wrap { padding: 0 16px; }
+  .hero { padding: 56px 0 96px; }
+  .dock { display: none; }
+  .btile { padding: 22px; }
+  .split { grid-template-columns: 1fr; }
+  .feat .demo { height: 320px; padding: 16px; }
+  .fbase { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="eye-off" viewBox="0 0 24 24"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></symbol>
+    <symbol id="dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+    <symbol id="sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
+    <symbol id="file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+    <symbol id="download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+    <symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Sotto home"><img class="mk" src="mark.png" alt="">sotto</a>
+    <nav class="nav-links" id="menu">
+      <a href="#helps">How it helps</a>
+      <a href="#notes">Notes</a>
+      <a href="#private">Privacy</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="cta small" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download</a>
+    <button class="menu-btn" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= hero ================= -->
+<section class="hero">
+  <div class="wrap reveal">
+    <h1 style="--i:0">A whole meeting copilot in a <span class="grad">0.8 MB</span> download.</h1>
+    <p class="sub" style="--i:2">Other AI note-takers ship gigabytes of models or send your calls to a server. Sotto transcribes, answers mid-meeting and writes your notes with the Apple Intelligence already built into your Mac.</p>
+    <div class="ctas" style="--i:3">
+      <a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
+      <a class="ghost" data-repo href="#get">View on GitHub →</a>
+    </div>
+    <p class="req" style="--i:4">Apple silicon · macOS 26 or later · Apple Intelligence on</p>
+  </div>
+
+  <div class="wrap">
+    <div class="mock-wrap">
+      <div class="mock" id="mock" role="img" aria-label="A Mac desktop with a video call open and the Sotto panel floating above it, answering questions about the call">
+        <div class="stage" id="stage">
+          <div class="menubar">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.2 8.5c0-1.6 1.3-2.4 1.4-2.4-.8-1.1-1.9-1.3-2.3-1.3-1-.1-1.9.6-2.4.6s-1.3-.6-2.1-.5C4.7 4.9 3.7 5.5 3.2 6.5c-1.2 2-.3 5 .8 6.6.6.8 1.2 1.7 2 1.6.8 0 1.1-.5 2.1-.5s1.2.5 2.1.5c.9 0 1.4-.8 1.9-1.6.6-.9.9-1.8.9-1.8s-1.8-.7-1.8-2.8zM9.6 3.6c.4-.5.7-1.3.6-2-.6 0-1.4.4-1.8.9-.4.5-.8 1.2-.7 1.9.7.1 1.4-.3 1.9-.8z"/></svg>
+            <b>Call</b><span>File</span><span>Edit</span><span>View</span><span>Window</span>
+            <span class="right"><span>100%</span><span id="clock">Mon 9:41</span></span>
+          </div>
+
+          <div class="call">
+            <div class="bar"><span class="lights"><i></i><i></i><i></i></span>Weekly launch sync</div>
+            <div class="tiles">
+              <div class="tile" data-who="Them"><span class="av">MK</span><span class="nm">Maya K.</span></div>
+              <div class="tile" data-who="Them"><span class="av">DO</span><span class="nm">Dev O.</span></div>
+              <div class="tile" data-who="Them"><span class="av">SL</span><span class="nm">Sam L.</span></div>
+              <div class="tile" data-who="You"><span class="av">You</span><span class="nm">You</span></div>
+            </div>
+            <div class="controls"><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="overlay">
+            <div class="glass pill">
+              <img class="mk" src="mark.png" alt="">
+              <button class="pb" id="heroHide" aria-expanded="true">Hide</button>
+              <span class="t" data-timer>04:12</span>
+              <span class="stop" title="Stop"><i></i></span>
+              <button class="ic" id="heroStealth" aria-pressed="false" aria-label="Hide from screen share"><svg class="i" aria-hidden="true"><use href="#eye"/></svg></button>
+              <span class="ic"><svg class="i" aria-hidden="true"><use href="#dots"/></svg></span>
+            </div>
+            <div class="glass card">
+              <div class="tabs"><span class="on">Chat</span><span>Transcript</span><span>History</span><span>Settings</span></div>
+              <div class="thread" id="thread"></div>
+              <div class="chips" id="chips"></div>
+              <div class="ask"><span>Ask about the conversation, or <kbd>⌘</kbd> <kbd>↵</kbd> for Assist</span></div>
+            </div>
+          </div>
+
+          <nav class="dock" aria-label="Dock">
+            <a title="Launchpad" style="background:linear-gradient(#f2f2f7,#d8d8e0)"><svg viewBox="0 0 24 24"><g fill="#8e8e98"><rect x="3" y="3" width="5" height="5" rx="1.5"/><rect x="9.5" y="3" width="5" height="5" rx="1.5"/><rect x="16" y="3" width="5" height="5" rx="1.5"/><rect x="3" y="9.5" width="5" height="5" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.5"/><rect x="16" y="9.5" width="5" height="5" rx="1.5"/><rect x="3" y="16" width="5" height="5" rx="1.5"/><rect x="9.5" y="16" width="5" height="5" rx="1.5"/><rect x="16" y="16" width="5" height="5" rx="1.5"/></g></svg></a>
+            <a title="Browser" style="background:#fff"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b9bff"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="#fff"/><path d="M15.5 8.5l-5 2 3 3z" fill="#ff4d4d"/></svg></a>
+            <a title="Settings" style="background:linear-gradient(#a7a9b3,#6e7079)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" fill="none" stroke="#3a3c44" stroke-width="3" stroke-dasharray="2.4 1.6"/><circle cx="12" cy="12" r="3.5" fill="#3a3c44"/></svg></a>
+            <a title="Video calls" class="on" style="background:#2d8cff"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="12" height="10" rx="2.5" fill="#fff"/><path d="M16 10.5l5-3v9l-5-3z" fill="#fff"/></svg></a>
+            <a title="Sotto" class="on" style="box-shadow:none"><img src="icon.png" alt="" style="width:48px;height:48px"></a>
+            <span class="sep"></span>
+            <a title="Trash" style="background:linear-gradient(#f4f4f6,#d9dae0)"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z" fill="#b9bcc6"/><rect x="5" y="5" width="14" height="2" rx="1" fill="#9a9da8"/></svg></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= how it helps ================= -->
+<section class="s soft" id="helps">
+  <div class="wrap">
+    <div class="head reveal"><h2>Help during the call</h2><p>A small glass panel that floats over every app, hears both sides, and answers when you ask.</p></div>
+    <div class="two reveal">
+      <article class="feat" style="--i:0">
+        <div class="demo">
+          <div class="glass recpill"><span class="dot"></span><span data-timer>00:23</span><span>Listening</span></div>
+          <div class="glass live" id="live"></div>
+        </div>
+        <p class="lead"><strong>Listens to both sides.</strong> Your mic is “You”, the call’s audio is “Them”, transcribed live on your Mac with nothing sent anywhere.</p>
+      </article>
+      <article class="feat" style="--i:1">
+        <div class="demo">
+          <div class="keys" aria-hidden="true"><span class="key" id="kc">⌘</span><span class="key" id="kr">↵</span></div>
+          <div class="glass answer" id="answer"><div class="label"><i></i>Assist · heard the last 4 minutes</div><p id="answerText"></p></div>
+        </div>
+        <p class="lead"><strong>Answers in a second or two.</strong> Press ⌘↵ for Assist, tap “What should I say?”, or ask anything about the conversation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= notes ================= -->
+<section class="s" id="notes">
+  <div class="wrap">
+    <div class="head reveal"><h2>Notes, before you’ve closed the call</h2><p>Stop the meeting and Sotto writes a summary, action items and decisions, saved as Markdown in <code style="font-family:var(--mono);font-size:.9em">~/Documents/Sotto</code>.</p></div>
+    <div class="notes" id="notesStack">
+      <article class="note" aria-label="Generated meeting notes: action items">
+        <div class="file"><svg class="i" aria-hidden="true"><use href="#file"/></svg> 2026-10-26 09.41.md</div>
+        <h4>Action items</h4>
+        <ul id="nActions"></ul>
+      </article>
+      <article class="note" aria-label="Generated meeting notes: summary">
+        <div class="file"><svg class="i" aria-hidden="true"><use href="#file"/></svg> 2026-10-26 09.41.md</div>
+        <h3>Weekly launch sync</h3>
+        <p id="nSummary"></p>
+      </article>
+      <article class="note" aria-label="Generated meeting notes: decisions">
+        <div class="file"><svg class="i" aria-hidden="true"><use href="#file"/></svg> 2026-10-26 09.41.md</div>
+        <h4>Decisions</h4>
+        <ul id="nDecisions"></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= private ================= -->
+<section class="s soft" id="private">
+  <div class="wrap">
+    <div class="head reveal"><h2>Quiet by design</h2><p><i>sotto voce</i>: in a quiet voice. An assistant that whispers to you, not the room.</p></div>
+    <div class="bento reveal">
+      <article class="btile" style="--i:0">
+        <div class="ui">
+          <div class="people">
+            <header>Meeting participants (4) <span class="badge"><i></i>No bots in the call</span></header>
+            <div class="person"><span class="av" style="background:#7163ff">MK</span><span class="who">Maya K.<small>maya@example.com</small></span><span class="tag">Host</span></div>
+            <div class="person"><span class="av" style="background:#df6de0">DO</span><span class="who">Dev O.<small>dev@example.com</small></span><span class="tag">Speaker</span></div>
+            <div class="person"><span class="av" style="background:#f0a04b">SL</span><span class="who">Sam L.<small>sam@example.com</small></span><span class="tag">Speaker</span></div>
+            <div class="person"><span class="av" style="background:#0f1222">You</span><span class="who">You<small>you@example.com</small></span><span class="tag">Speaker</span></div>
+          </div>
+        </div>
+        <p class="lead"><strong>Nothing joins your call.</strong> Sotto hears your Mac’s audio, so no note-taker bot shows up in the participant list.</p>
+      </article>
+
+      <article class="btile" style="--i:1">
+        <div class="ui">
+          <div class="split">
+            <div><div class="screen"><div class="doc"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><p class="screen-cap"><b>What they see</b> when you share</p></div>
+            <div><div class="screen"><div class="doc"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="glass mini">Legal signs off Thursday, so the earliest launch is Tuesday.</div></div><p class="screen-cap"><b>What you see</b></p></div>
+          </div>
+        </div>
+        <p class="lead"><strong>Hide from screen share.</strong> One click on <svg class="i" aria-hidden="true"><use href="#eye"/></svg> and a dotted border shows it’s on. Meeting apps don’t all honour it the same way, so check your share preview first.</p>
+      </article>
+
+      <article class="btile" style="--i:2">
+        <div class="ui">
+          <div class="dragui">
+            <div class="desk" id="desk">
+              <div class="glass mini-pill" id="miniPill"><img class="mk" src="mark.png" alt="">Hide <span style="font-family:var(--mono);color:var(--glass-muted)">04:12</span></div>
+              <p class="hint">Drag the panel</p>
+            </div>
+            <div class="keys2"><button class="key" id="k1" aria-label="Command">⌘</button>+<button class="key" id="k2" aria-label="Backslash, hide or show">\</button><span>hides it</span></div>
+          </div>
+        </div>
+        <p class="lead"><strong>Out of your way.</strong> Floats over every app and full-screen Space, never steals focus. ⌘\ hides it; drag it anywhere.</p>
+      </article>
+
+      <article class="btile" style="--i:3">
+        <div class="ui">
+          <div style="text-align:center">
+            <div class="stat" style="border:0;padding:0"><div class="n grad">0<span style="color:inherit">bytes</span></div></div>
+            <p class="muted" style="margin-top:8px;font-size:15px">sent to a server. There isn’t one.</p>
+          </div>
+        </div>
+        <p class="lead"><strong>Private by default.</strong> Audio, transcripts and notes stay on your Mac. No account, no cloud, no API key.</p>
+      </article>
+
+      <article class="btile wide" style="--i:4">
+        <div class="ui" style="min-height:120px">
+          <div class="apps">
+            <span class="app"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0B5CFF"/><rect x="4.5" y="8" width="10" height="8" rx="2" fill="#fff"/><path d="M15.5 11l4-2.5v7l-4-2.5z" fill="#fff"/></svg>Zoom</span>
+            <span class="app"><svg viewBox="0 0 24 24" fill="#00897B" aria-hidden="true"><path d="M5.53 2.13 0 7.75h5.53zm.398 0v5.62h7.608v3.65l5.47-4.45c-.014-1.22.031-2.25-.025-3.46-.148-1.09-1.287-1.47-2.236-1.36zM23.1 4.32c-.802.295-1.358.995-2.047 1.49-2.506 2.05-4.982 4.12-7.468 6.19 3.025 2.59 6.04 5.18 9.065 7.76 1.218.671 1.428-.814 1.328-1.64v-13a.828.828 0 0 0-.877-.825zM.038 8.15v7.7h5.53v-7.7zm13.577 8.1H6.008v5.62c3.864-.006 7.737.011 11.58-.009 1.02-.07 1.618-1.12 1.468-2.07v-2.51l-5.47-4.68v3.65zm-13.577 0c.02 1.44-.041 2.88.033 4.31.162.948 1.158 1.43 2.047 1.31h3.464v-5.62z"/></svg>Google Meet</span>
+            <span class="app"><svg viewBox="0 0 24 24" fill="#6264A7" aria-hidden="true"><path d="M20.625 8.127q-.55 0-1.025-.205-.475-.205-.832-.563-.358-.357-.563-.832Q18 6.053 18 5.502q0-.54.205-1.02t.563-.837q.357-.358.832-.563.474-.205 1.025-.205.54 0 1.02.205t.837.563q.358.357.563.837.205.48.205 1.02 0 .55-.205 1.025-.205.475-.563.832-.357.358-.837.563-.48.205-1.02.205zm0-3.75q-.469 0-.797.328-.328.328-.328.797 0 .469.328.797.328.328.797.328.469 0 .797-.328.328-.328.328-.797 0-.469-.328-.797-.328-.328-.797-.328zM24 10.002v5.578q0 .774-.293 1.46-.293.685-.803 1.194-.51.51-1.195.803-.686.293-1.459.293-.445 0-.908-.105-.463-.106-.85-.329-.293.95-.855 1.729-.563.78-1.319 1.336-.756.557-1.67.861-.914.305-1.898.305-1.148 0-2.162-.398-1.014-.399-1.805-1.102-.79-.703-1.312-1.664t-.674-2.086h-5.8q-.411 0-.704-.293T0 16.881V6.873q0-.41.293-.703t.703-.293h8.59q-.34-.715-.34-1.5 0-.727.275-1.365.276-.639.75-1.114.475-.474 1.114-.75.638-.275 1.365-.275t1.365.275q.639.276 1.114.75.474.475.75 1.114.275.638.275 1.365t-.275 1.365q-.276.639-.75 1.113-.475.475-1.114.75-.638.276-1.365.276-.188 0-.375-.024-.188-.023-.375-.058v1.078h10.875q.469 0 .797.328.328.328.328.797zM12.75 2.373q-.41 0-.78.158-.368.158-.638.434-.27.275-.428.639-.158.363-.158.773 0 .41.158.78.159.368.428.638.27.27.639.428.369.158.779.158.41 0 .773-.158.364-.159.64-.428.274-.27.433-.639.158-.369.158-.779 0-.41-.158-.773-.159-.364-.434-.64-.275-.275-.639-.433-.363-.158-.773-.158zM6.937 9.814h2.25V7.94H2.814v1.875h2.25v6h1.875zm10.313 7.313v-6.75H12v6.504q0 .41-.293.703t-.703.293H8.309q.152.809.556 1.5.405.691.985 1.19.58.497 1.318.779.738.281 1.582.281.926 0 1.746-.352.82-.351 1.436-.966.615-.616.966-1.43.352-.815.352-1.752zm5.25-1.547v-5.203h-3.75v6.855q.305.305.691.452.387.146.809.146.469 0 .879-.176.41-.175.715-.48.304-.305.48-.715t.176-.879Z"/></svg>Microsoft Teams</span>
+            <span class="app"><svg viewBox="0 0 24 24" fill="#4A154B" aria-hidden="true"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>Slack</span>
+            <span class="app"><svg viewBox="0 0 24 24" fill="#000000" aria-hidden="true"><path d="M21.78 7.376c.512 1.181.032 2.644-1.11 3.106-2.157.888-3-1.295-3-1.295-.236-.55-.727-1.496-1.335-1.496-.204 0-.503 0-.94.844-.229.443-.434 1.185-.616 1.84l-.09.32c-.373-1.587-.821-3.454-1.536-4.816-.195-.38-.42-.74-.673-1.08a5.135 5.135 0 0 1 1.743-1.337 4.891 4.891 0 0 1 2.112-.463c1.045 0 2.765.338 4.227 2.227.167.206.317.424.448.654.278.441.52.904.726 1.383l.043.113zM.02 8.4C-.15 7.105.8 5.845 1.953 5.755c1.794-.157 2.36 1.385 2.455 1.89l.022.137c.07.44.29 1.838.48 2.744.078.4.244 1.013.353 1.416l.006.022.026.092c.11.4.232.799.362 1.193.185.548.399 1.085.641 1.61.47.955.93 1.45 1.367 1.45.203 0 .512 0 .96-.878.283-.59.512-1.208.684-1.845.373 1.598.811 3.128 1.495 4.456.205.406.444.794.715 1.16a5.124 5.124 0 0 1-1.742 1.338 4.88 4.88 0 0 1-2.112.461c-1.548 0-3.727-.698-5.339-4.005a22.407 22.407 0 0 1-1.078-2.824 26.848 26.848 0 0 1-.693-2.656 48.56 48.56 0 0 1-.215-1.114C.191 9.603.074 8.872.02 8.4zm22.047-2.645-.202-.022h-.052c.222.392.421.797.597 1.215l.053.113c.322.76.346 1.614.068 2.391a3.079 3.079 0 0 1-1.552 1.749 2.93 2.93 0 0 1-1.228.28 3.115 3.115 0 0 1-.854-.135c-.299 1.182-.768 2.634-1.195 3.511-.427.877-.93 1.451-1.378 1.451-.192 0-.501 0-.95-.877a10.746 10.746 0 0 1-.683-1.845 38.722 38.722 0 0 1-.396-1.575 12.67 12.67 0 0 1-.136-.598l-.002-.01c-.406-1.778-.865-3.645-1.655-5.142A8.263 8.263 0 0 0 11.52 4.8a5.136 5.136 0 0 0-1.748-1.34A4.892 4.892 0 0 0 7.654 3c-1.036 0-2.754.338-4.217 2.228.466.223.867.562 1.164.984.305.433.499.933.565 1.458.076.563.256 1.654.47 2.688l.001.007c.021.11.042.221.073.342.126-.34.25-.642.38-.955l.112-.271.128-.293c.235-.55.726-1.496 1.324-1.496.213 0 .513 0 .95.844.296.606.532 1.239.706 1.89.138.507.276 1.047.394 1.587.04.148.07.296.101.444l.006.028c.427 1.879.875 3.69 1.644 5.187.159.317.34.622.545.911.15.215.31.422.48.62 1.27 1.45 2.733 1.8 3.843 1.8 1.548 0 3.738-.698 5.35-4.006.822-1.7 1.515-4.208 1.772-5.48.256-1.27.449-2.419.534-3.115.04-.307.023-.618-.051-.918-.075-.299-.205-.579-.382-.825a2.247 2.247 0 0 0-.653-.607 2.143 2.143 0 0 0-.826-.296z"/></svg>Webex</span>
+          </div>
+        </div>
+        <p class="lead" style="text-align:center"><strong>Works with anything that makes sound.</strong> No integrations, no plugins, no calendar access. If it plays through your Mac, Sotto can hear it.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= stats ================= -->
+<section class="s">
+  <div class="wrap stats">
+    <div class="reveal">
+      <div class="stat" style="--i:0"><div class="n">0.8<span>MB</span></div><p class="l">The whole download</p><p class="p">Local Whisper models alone weigh 75 MB to 3 GB. Sotto ships none; it uses the speech recognizer and language model macOS already has.</p></div>
+      <div class="stat" style="--i:1"><div class="n">$0</div><p class="l">Forever</p><p class="p">No subscription, no usage limits, MIT licensed. Your Mac already paid for the AI.</p></div>
+      <div class="stat" style="--i:2"><div class="n">1–3<span>s</span></div><p class="l">Typical answer time</p><p class="p">Measured on an M4 MacBook Air. Notes take about five seconds when you stop.</p></div>
+    </div>
+    <div class="glass tpanel reveal">
+      <header style="--i:0"><span class="dot"></span>Real-time transcript<span class="t" data-timer>04:12</span></header>
+      <div class="scroll" id="tscroll" style="--i:1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= faq ================= -->
+<section class="s soft" id="faq">
+  <div class="wrap">
+    <div class="head reveal"><h2>Questions</h2></div>
+    <div class="faq reveal">
+      <details name="faq" open style="--i:0"><summary>Is it really free?</summary><p>Yes. Sotto is open source under the MIT license. There’s no account, no subscription and no server, because the AI is the one Apple already put on your Mac.</p></details>
+      <details name="faq" style="--i:1"><summary>Which Macs does it run on?</summary><p>Any Mac with Apple silicon (M1 or later) on macOS 26 or later, with Apple Intelligence turned on in System Settings → Apple Intelligence &amp; Siri. Sotto checks at launch and tells you plainly if something’s missing.</p></details>
+      <details name="faq" style="--i:2"><summary>What permissions does it need?</summary><p>Two: the microphone, to transcribe you, and <b>System Audio Recording Only</b>, to transcribe everyone else. It hears audio only and never sees your screen. If the other side isn’t showing up, turn Sotto on in System Settings → Privacy &amp; Security → Screen &amp; System Audio Recording.</p></details>
+      <details name="faq" style="--i:3"><summary>Can people on the call tell?</summary><p>No bot joins, so nothing appears in the participant list. Hiding the panel from screen share is opt-in, and meeting apps don’t all honour it the same way, so check your share preview before relying on it. And be a good human: in many places you need consent to record or transcribe a call.</p></details>
+      <details name="faq" style="--i:4"><summary>How good is it, honestly?</summary><p>It runs on Apple’s ~3B-parameter on-device model, which is what makes it free and private, and also sets the ceiling. It’s genuinely useful for summaries, follow-ups and “what was that number again?”, not for deep reasoning. Everyone except you is “Them”, because Apple’s speech APIs don’t separate speakers. Names get misheard; add them under Settings → Names &amp; terms and the notes spell them right.</p></details>
+      <details name="faq" style="--i:5"><summary>Which languages?</summary><p>Your Mac’s language, if Apple’s speech recognizer supports it. Only English has been tested so far, so reports from other languages are very welcome.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= closing ================= -->
+<section class="s get" id="get">
+  <div class="wrap reveal">
+    <h2 style="--i:0">Your Mac already has the AI. <span class="grad">Put it to work.</span></h2>
+    <p class="sub" style="--i:1">Free, 0.8 MB, and nothing else to download. Ever.</p>
+    <ol class="steps" style="--i:2">
+      <li><span><b>Download</b> Sotto.zip and open it.</span></li>
+      <li><span><b>Drag</b> Sotto into Applications.</span></li>
+      <li><span><b>Open it.</b> macOS will say it can’t verify the developer, because Sotto isn’t notarized yet. Go to System Settings → Privacy &amp; Security and click <b>Open Anyway</b>. Once.</span></li>
+    </ol>
+    <div class="ctas-c" style="--i:3"><a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
+      <a class="ghost" data-repo="#build-and-run" href="#get">Or build it from source →</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <a class="logo" href="#top" style="padding:0"><img class="mk" src="mark.png" alt="">sotto</a>
+        <p class="muted" style="margin-top:12px;max-width:32ch">A whole meeting copilot in a 0.8 MB download.</p>
+      </div>
+      <div><h4>Product</h4><a href="#helps">How it helps</a><a href="#notes">Notes</a><a href="#private">Privacy</a><a href="#faq">FAQ</a></div>
+      <div><h4>Project</h4><a data-repo href="#get">Source code</a><a data-repo="#readme" href="#get">README</a><a data-repo="/blob/main/LICENSE" href="#get">MIT license</a></div>
+      <div><h4>Support</h4><a data-repo="/issues" href="#get">Report a bug</a><a data-repo="/discussions" href="#get">Discussions</a></div>
+    </div>
+    <div class="fbase"><span>© 2026 Jiyauddin Saiyad · MIT</span><a data-repo href="#get" aria-label="Sotto on GitHub"><svg><use href="#gh"/></svg></a></div>
+  </div>
+</footer>
+
+<script>
+// Every GitHub link on the page hangs off this one string.
+const REPO = 'https://github.com/JiyauddinSaiyad/sotto'
+
+// All the fake meeting lives here, so nobody has to go spelunking in the DOM to change the demo.
+const MEETING = {
+  lines: [
+    ['Them', 'Pricing page is done. We’re just waiting on legal for the terms.'],
+    ['You', 'When do they expect to sign off?'],
+    ['Them', 'Thursday at the latest. Then marketing needs two days for the email.'],
+    ['Them', 'So the earliest realistic launch is the following Tuesday.'],
+    ['You', 'Okay. Can we keep the annual discount at twenty percent?'],
+    ['Them', 'Finance is fine with twenty, just not with a free month on top.'],
+    ['Them', 'I can draft the launch email once legal is through.'],
+    ['You', 'Great, let’s lock Tuesday then.'],
+  ],
+  answers: [
+    ['Assist', 'Legal signs off Thursday and marketing needs two days, so Tuesday is the earliest launch. Finance approved a 20% annual discount, but not an extra free month.'],
+    ['What should I say?', '“Let’s lock Tuesday and ship the 20% annual discount without the free month. Who’s sending the email draft?”'],
+    ['Follow-up questions', '• Is Thursday a firm date from legal?\n• Who reviews the launch email?\n• Should the free month go to existing customers instead?'],
+    ['Recap', '• Pricing page is done\n• Legal sign-off expected Thursday\n• Launch is next Tuesday at the earliest\n• 20% annual discount, no free month'],
+  ],
+  summary: 'The pricing page is finished and waiting on legal, who expect to sign off by Thursday. Marketing needs two days for the launch email, which puts the launch on Tuesday. Finance approved a 20% annual discount.',
+  actions: ['Confirm legal sign-off by Thursday', 'Draft the launch email once legal is through', 'Check whether existing customers get a free month'],
+  decisions: ['Launch on Tuesday', '20% annual discount, no free month on top', 'Ship the pricing page as it is'],
+}
+
+const $ = (s, el = document) => el.querySelector(s)
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+
+// Repo links
+if (REPO) {
+  document.querySelectorAll('[data-repo]').forEach(a => { a.href = REPO + (a.dataset.repo || '') })
+}
+
+// Mobile menu
+const menuBtn = $('.menu-btn'), menu = $('#menu')
+menuBtn.onclick = () => menuBtn.setAttribute('aria-expanded', menu.classList.toggle('open'))
+menu.onclick = () => { menu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false) }
+
+// Scale the 1120×700 stage to whatever box it got. Cheaper than making a fake desktop responsive.
+const mock = $('#mock'), stage = $('#stage')
+new ResizeObserver(([e]) => stage.style.setProperty('--s', e.contentRect.width / 1120)).observe(mock)
+
+// Hero pill: Hide folds the card, the eye flips stealth. Both actually work, unlike most hero demos.
+const overlay = $('.overlay'), heroHide = $('#heroHide'), heroStealth = $('#heroStealth')
+heroHide.onclick = () => {
+  const folded = overlay.classList.toggle('collapsed')
+  heroHide.textContent = folded ? 'Show' : 'Hide'
+  heroHide.setAttribute('aria-expanded', !folded)
+}
+heroStealth.onclick = () => {
+  const on = overlay.classList.toggle('stealth')
+  heroStealth.setAttribute('aria-pressed', on)
+  heroStealth.innerHTML = `<svg class="i" aria-hidden="true"><use href="#${on ? 'eye-off' : 'eye'}"/></svg>`
+}
+
+// Clock & timers. Everyone shares one meeting, so the numbers agree with each other.
+const pad = n => String(n).padStart(2, '0')
+let secs = 252
+const tick = () => {
+  const t = `${pad(Math.floor(secs / 60))}:${pad(secs % 60)}`
+  document.querySelectorAll('[data-timer]').forEach(el => { el.textContent = t })
+  const d = new Date()
+  $('#clock').textContent = d.toLocaleDateString('en-US', { weekday: 'short' }) + ' ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  secs++
+}
+tick()
+if (!still) setInterval(tick, 1000)
+
+// Only animate what's on screen. A loop nobody sees is just a space heater.
+const visible = new WeakMap()
+const io = new IntersectionObserver(es => es.forEach(e => {
+  visible.set(e.target, e.isIntersecting)
+  if (e.isIntersecting) e.target.classList.add('in')
+}), { threshold: 0.2 })
+document.querySelectorAll('.reveal, #mock, #live, #answer, #notesStack, #tscroll').forEach(el => io.observe(el))
+const onScreen = async el => { while (!visible.get(el)) await sleep(300) }
+
+async function type(el, text, speed = 22) {
+  el.classList.add('caret')
+  for (let i = 1; i <= text.length; i++) { el.textContent = text.slice(0, i); await sleep(speed) }
+  el.classList.remove('caret')
+}
+
+function line(who, text) {
+  const p = document.createElement('p')
+  p.className = 'line'
+  p.innerHTML = `<b class="${who === 'Them' ? 'them' : ''}">${who}:</b>${esc(text)}`
+  return p
+}
+
+// Notes
+$('#nSummary').textContent = MEETING.summary
+$('#nActions').innerHTML = MEETING.actions.map(a => `<li><span class="box"></span>${esc(a)}</li>`).join('')
+$('#nDecisions').innerHTML = MEETING.decisions.map(d => `<li><span class="bullet"></span>${esc(d)}</li>`).join('')
+
+// Hero: cycle the chips like someone's actually using it
+const thread = $('#thread'), chips = $('#chips')
+chips.innerHTML = MEETING.answers.map(([l], i) => `<button class="chip" tabindex="-1">${i === 0 ? '<svg class="i" aria-hidden="true"><use href="#sparkles"/></svg>' : ''}${l}</button>`).join('')
+async function hero() {
+  if (still) {
+    const [label, text] = MEETING.answers.at(-1)
+    chips.children[3].classList.add('active')
+    thread.innerHTML = `<div class="msg me">${label}</div><div class="msg ai">${esc(text)}</div>`
+    return
+  }
+  for (let i = 0; ; i = (i + 1) % MEETING.answers.length) {
+    await onScreen(mock)
+    const [label, text] = MEETING.answers[i]
+    ;[...chips.children].forEach((c, j) => c.classList.toggle('active', i === j))
+    thread.innerHTML = `<div class="msg me">${label}</div><div class="msg ai"></div>`
+    await sleep(500)
+    await type(thread.lastChild, text)
+    await sleep(2600)
+  }
+}
+
+// Speaker highlight on the call tiles follows the transcript
+const tiles = [...document.querySelectorAll('.tile')]
+function talking(who, n) {
+  tiles.forEach(t => t.classList.remove('talking'))
+  const them = tiles.filter(t => t.dataset.who === 'Them')
+  ;(who === 'You' ? tiles[3] : them[n % them.length]).classList.add('talking')
+}
+
+// Card A + the stats panel: live transcript
+async function transcript(box, max, stamp) {
+  if (still) { MEETING.lines.slice(-max).forEach(([w, t]) => { const p = line(w, t); p.classList.add('in'); box.append(p) }); return }
+  // Start mid-meeting, not on an empty panel
+  const n = MEETING.lines.length
+  // Clock only moves forward, even when the meeting quietly starts over
+  let at = 230
+  const stamped = i => { const p = line(...MEETING.lines[i]); at += 7; if (stamp) p.insertAdjacentHTML('afterbegin', `<span class="stamp">${pad(Math.floor(at / 60))}:${pad(at % 60)}</span>`); return p }
+  for (let i = n - max + 1; i < n; i++) { const p = stamped(i); p.classList.add('in'); box.append(p) }
+  for (let i = 0; ; i = (i + 1) % n) {
+    await onScreen(box)
+    const [who, text] = MEETING.lines[i]
+    const p = stamped(i)
+    box.append(p)
+    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('in')))
+    while (box.children.length > max) box.firstChild.remove()
+    if (box.id === 'live') talking(who, i)
+    await sleep(1700 + text.length * 18)
+  }
+}
+
+// Card B: press ⌘↵, get an answer
+async function assist() {
+  const box = $('#answer'), out = $('#answerText'), [kc, kr] = [$('#kc'), $('#kr')]
+  const text = MEETING.answers[0][1]
+  if (still) { box.classList.add('in'); out.textContent = text; return }
+  for (;;) {
+    await onScreen(box)
+    box.classList.remove('in'); out.textContent = ''
+    await sleep(900)
+    kc.classList.add('down'); await sleep(160); kr.classList.add('down'); await sleep(180)
+    kc.classList.remove('down'); kr.classList.remove('down')
+    await sleep(150); box.classList.add('in'); await sleep(250)
+    await type(out, text, 24)
+    await sleep(3000)
+  }
+}
+
+// Bento: drag the mini panel around, ⌘\ to hide it
+const desk = $('#desk'), mini = $('#miniPill')
+let drag = null, pos = { x: 0, y: 0 }
+const place = () => { mini.style.transform = `translate(calc(-50% + ${pos.x}px), ${pos.y}px)` }
+mini.onpointerdown = e => { drag = { x: e.clientX - pos.x, y: e.clientY - pos.y }; mini.setPointerCapture(e.pointerId); mini.classList.add('dragging') }
+mini.onpointermove = e => {
+  if (!drag) return
+  const w = desk.clientWidth, pw = mini.offsetWidth
+  pos.x = Math.max(-(w - pw) / 2 + 8, Math.min((w - pw) / 2 - 8, e.clientX - drag.x))
+  pos.y = Math.max(-14, Math.min(desk.clientHeight - mini.offsetHeight - 30, e.clientY - drag.y))
+  place()
+}
+mini.onpointerup = mini.onpointercancel = () => { drag = null; mini.classList.remove('dragging') }
+async function hideShow() {
+  const k1 = $('#k1'), k2 = $('#k2')
+  k1.classList.add('down'); k2.classList.add('down')
+  mini.classList.toggle('hidden')
+  await sleep(160)
+  k1.classList.remove('down'); k2.classList.remove('down')
+}
+$('#k1').onclick = $('#k2').onclick = hideShow
+document.addEventListener('keydown', e => { if (e.metaKey && e.key === '\\' && visible.get(desk)) { e.preventDefault(); hideShow() } })
+io.observe(desk)
+
+hero()
+transcript($('#live'), 6)
+transcript($('#tscroll'), 9, true)
+assist()
+</script>
+</body>
+</html>
