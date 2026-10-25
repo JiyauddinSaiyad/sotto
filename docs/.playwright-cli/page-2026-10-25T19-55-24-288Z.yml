@@ -1,0 +1,381 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sotto home" [ref=e4] [cursor=pointer]:
+        - /url: "#top"
+        - text: sotto
+      - navigation [ref=e5]:
+        - link "How it helps" [ref=e6] [cursor=pointer]:
+          - /url: "#helps"
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: "#notes"
+        - link "Privacy" [ref=e8] [cursor=pointer]:
+          - /url: "#private"
+        - link "Pricing" [ref=e9] [cursor=pointer]:
+          - /url: "#pricing"
+        - link "FAQ" [ref=e10] [cursor=pointer]:
+          - /url: "#faq"
+      - link "Download" [ref=e11] [cursor=pointer]:
+        - /url: https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip
+        - img [ref=e12]
+        - text: Download
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - heading "A whole meeting copilot in a 0.8 MB download." [level=1] [ref=e17]
+        - paragraph [ref=e18]: Other AI note-takers ship gigabytes of models or send your calls to a server. Sotto transcribes, answers mid-meeting and writes your notes with the Apple Intelligence already built into your Mac.
+        - generic [ref=e19]:
+          - link "Download for Mac" [ref=e20] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip
+            - img [ref=e21]
+            - text: Download for Mac
+          - link "View on GitHub →" [ref=e23] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto
+        - paragraph [ref=e24]: Apple silicon · macOS 26 or later · Apple Intelligence on
+      - img "A Mac desktop with a video call open and the Sotto panel floating above it, answering questions about the call" [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e32]: Call
+            - generic [ref=e33]: File
+            - generic [ref=e34]: Edit
+            - generic [ref=e35]: View
+            - generic [ref=e36]: Window
+            - generic [ref=e37]:
+              - generic [ref=e38]: 100%
+              - generic [ref=e39]: Mon 1:25 AM
+          - generic [ref=e40]:
+            - generic [ref=e41]: Weekly launch sync
+            - generic [ref=e46]:
+              - generic [ref=e47]:
+                - generic [ref=e48]: MK
+                - generic [ref=e49]: Maya K.
+              - generic [ref=e50]:
+                - generic [ref=e51]: DO
+                - generic [ref=e52]: Dev O.
+              - generic [ref=e53]:
+                - generic [ref=e54]: SL
+                - generic [ref=e55]: Sam L.
+              - generic [ref=e56]:
+                - generic [ref=e57]: You
+                - generic [ref=e58]: You
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - button "Hide" [expanded] [ref=e66] [cursor=pointer]
+              - generic [ref=e67]: 04:13
+              - generic "Stop" [ref=e68]
+              - button "Hide from screen share" [ref=e70] [cursor=pointer]:
+                - img [ref=e71]
+              - img [ref=e74]
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - generic [ref=e78]: Chat
+                - generic [ref=e79]: Transcript
+                - generic [ref=e80]: History
+                - generic [ref=e81]: Settings
+              - generic [ref=e83]:
+                - button "Assist" [ref=e84] [cursor=pointer]:
+                  - img [ref=e85]
+                  - text: Assist
+                - button "What should I say?" [ref=e87] [cursor=pointer]
+                - button "Follow-up questions" [ref=e88] [cursor=pointer]
+                - button "Recap" [ref=e89] [cursor=pointer]
+              - generic [ref=e91]: Ask about the conversation, or ⌘ ↵ for Assist
+          - navigation "Dock" [ref=e92]:
+            - generic "Launchpad" [ref=e93]:
+              - img [ref=e94]
+            - generic "Browser" [ref=e105]:
+              - img [ref=e106]
+            - generic "Settings" [ref=e110]:
+              - img [ref=e111]
+            - generic "Video calls" [ref=e114]:
+              - img [ref=e115]
+            - generic "Sotto" [ref=e118]
+            - generic "Trash" [ref=e120]:
+              - img [ref=e121]
+    - generic [ref=e125]:
+      - generic [ref=e126]:
+        - heading "Help during the call" [level=2] [ref=e127]
+        - paragraph [ref=e128]: A small glass panel that floats over every app, hears both sides, and answers when you ask.
+      - generic [ref=e129]:
+        - article [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - generic [ref=e134]: 04:13
+              - generic [ref=e135]: Listening
+            - generic [ref=e136]:
+              - paragraph [ref=e137]: Them:So the earliest realistic launch is the following Tuesday.
+              - paragraph [ref=e138]: You:Okay. Can we keep the annual discount at twenty percent?
+              - paragraph [ref=e139]: Them:Finance is fine with twenty, just not with a free month on top.
+              - paragraph [ref=e140]: Them:I can draft the launch email once legal is through.
+              - paragraph [ref=e141]: You:Great, let’s lock Tuesday then.
+          - paragraph [ref=e142]:
+            - strong [ref=e143]: Listens to both sides.
+            - text: Your mic is “You”, the call’s audio is “Them”, transcribed live on your Mac with nothing sent anywhere.
+        - article [ref=e144]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]: ⌘
+              - generic [ref=e148]: ↵
+            - generic [ref=e149]:
+              - generic [ref=e150]: Assist · heard the last 4 minutes
+              - paragraph
+          - paragraph [ref=e152]:
+            - strong [ref=e153]: Answers in a second or two.
+            - text: Press ⌘↵ for Assist, tap “What should I say?”, or ask anything about the conversation.
+    - generic [ref=e155]:
+      - generic [ref=e156]:
+        - heading "Notes, before you’ve closed the call" [level=2] [ref=e157]
+        - paragraph [ref=e158]:
+          - text: Stop the meeting and Sotto writes a summary, action items and decisions, saved as Markdown in
+          - code [ref=e159]: ~/Documents/Sotto
+          - text: .
+      - generic [ref=e160]:
+        - 'article "Generated meeting notes: action items" [ref=e161]':
+          - generic [ref=e162]:
+            - img [ref=e163]
+            - text: 2026-10-26 09.41.md
+          - heading "Action items" [level=4] [ref=e165]
+          - list [ref=e166]:
+            - listitem [ref=e167]: Confirm legal sign-off by Thursday
+            - listitem [ref=e169]: Draft the launch email once legal is through
+            - listitem [ref=e171]: Check whether existing customers get a free month
+        - 'article "Generated meeting notes: summary" [ref=e173]':
+          - generic [ref=e174]:
+            - img [ref=e175]
+            - text: 2026-10-26 09.41.md
+          - heading "Weekly launch sync" [level=3] [ref=e177]
+          - paragraph [ref=e178]: The pricing page is finished and waiting on legal, who expect to sign off by Thursday. Marketing needs two days for the launch email, which puts the launch on Tuesday. Finance approved a 20% annual discount.
+        - 'article "Generated meeting notes: decisions" [ref=e179]':
+          - generic [ref=e180]:
+            - img [ref=e181]
+            - text: 2026-10-26 09.41.md
+          - heading "Decisions" [level=4] [ref=e183]
+          - list [ref=e184]:
+            - listitem [ref=e185]: Launch on Tuesday
+            - listitem [ref=e187]: 20% annual discount, no free month on top
+            - listitem [ref=e189]: Ship the pricing page as it is
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - heading "Quiet by design" [level=2] [ref=e194]
+        - paragraph [ref=e195]: "sotto voce: in a quiet voice. An assistant that whispers to you, not the room."
+      - generic [ref=e196]:
+        - article [ref=e197]:
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - text: Meeting participants (4)
+              - generic [ref=e201]: No bots in the call
+            - generic [ref=e203]:
+              - generic [ref=e204]: MK
+              - generic [ref=e205]:
+                - text: Maya K.
+                - generic [ref=e206]: maya@example.com
+              - generic [ref=e207]: Host
+            - generic [ref=e208]:
+              - generic [ref=e209]: DO
+              - generic [ref=e210]:
+                - text: Dev O.
+                - generic [ref=e211]: dev@example.com
+              - generic [ref=e212]: Speaker
+            - generic [ref=e213]:
+              - generic [ref=e214]: SL
+              - generic [ref=e215]:
+                - text: Sam L.
+                - generic [ref=e216]: sam@example.com
+              - generic [ref=e217]: Speaker
+            - generic [ref=e218]:
+              - generic [ref=e219]: You
+              - generic [ref=e220]:
+                - text: You
+                - generic [ref=e221]: you@example.com
+              - generic [ref=e222]: Speaker
+          - paragraph [ref=e223]:
+            - strong [ref=e224]: Nothing joins your call.
+            - text: Sotto hears your Mac’s audio, so no note-taker bot shows up in the participant list.
+        - article [ref=e225]:
+          - generic [ref=e227]:
+            - paragraph [ref=e237]: What they see when you share
+            - generic [ref=e238]:
+              - generic [ref=e247]: Legal signs off Thursday, so the earliest launch is Tuesday.
+              - paragraph [ref=e248]: What you see
+          - paragraph [ref=e249]:
+            - strong [ref=e250]: Hide from screen share.
+            - text: One click on
+            - img [ref=e251]
+            - text: and a dotted border shows it’s on. Meeting apps don’t all honour it the same way, so check your share preview first.
+        - article [ref=e253]:
+          - generic [ref=e255]:
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - text: Hide
+                - generic [ref=e258]: 04:12
+              - paragraph [ref=e259]: Drag the panel
+            - generic [ref=e260]:
+              - button "Command" [ref=e261] [cursor=pointer]: ⌘
+              - text: +
+              - button "Backslash, hide or show" [ref=e262] [cursor=pointer]: \
+              - generic [ref=e263]: hides it
+          - paragraph [ref=e264]:
+            - strong [ref=e265]: Out of your way.
+            - text: Floats over every app and full-screen Space, never steals focus. ⌘\ hides it; drag it anywhere.
+        - article [ref=e266]:
+          - generic [ref=e268]:
+            - generic [ref=e270]: 0bytes
+            - paragraph [ref=e271]: sent to a server. There isn’t one.
+          - paragraph [ref=e272]:
+            - strong [ref=e273]: Private by default.
+            - text: Audio, transcripts and notes stay on your Mac. No account, no cloud, no API key.
+        - article [ref=e274]:
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - img [ref=e278]
+              - text: Zoom
+            - generic [ref=e282]:
+              - img [ref=e283]
+              - text: Google Meet
+            - generic [ref=e285]:
+              - img [ref=e286]
+              - text: Microsoft Teams
+            - generic [ref=e288]:
+              - img [ref=e289]
+              - text: Slack
+            - generic [ref=e291]:
+              - img [ref=e292]
+              - text: Webex
+          - paragraph [ref=e294]:
+            - strong [ref=e295]: Works with anything that makes sound.
+            - text: No integrations, no plugins, no calendar access. If it plays through your Mac, Sotto can hear it.
+    - generic [ref=e297]:
+      - generic [ref=e298]:
+        - generic [ref=e299]:
+          - generic [ref=e300]: 0.8MB
+          - paragraph [ref=e301]: The whole download
+          - paragraph [ref=e302]: Local Whisper models alone weigh 75 MB to 3 GB. Sotto ships none; it uses the speech recognizer and language model macOS already has.
+        - generic [ref=e303]:
+          - generic [ref=e304]: $0
+          - paragraph [ref=e305]: Forever
+          - paragraph [ref=e306]: No subscription, no usage limits, MIT licensed. Your Mac already paid for the AI.
+        - generic [ref=e307]:
+          - generic [ref=e308]: 1–3s
+          - paragraph [ref=e309]: Typical answer time
+          - paragraph [ref=e310]: Measured on an M4 MacBook Air. Notes take about five seconds when you stop.
+      - generic [ref=e311]:
+        - generic [ref=e312]:
+          - text: Real-time transcript
+          - generic [ref=e314]: 04:13
+        - generic [ref=e315]:
+          - paragraph [ref=e316]: 03:57Them:Pricing page is done. We’re just waiting on legal for the terms.
+          - paragraph [ref=e317]: 04:04You:When do they expect to sign off?
+          - paragraph [ref=e318]: 04:11Them:Thursday at the latest. Then marketing needs two days for the email.
+          - paragraph [ref=e319]: 04:18Them:So the earliest realistic launch is the following Tuesday.
+          - paragraph [ref=e320]: 04:25You:Okay. Can we keep the annual discount at twenty percent?
+          - paragraph [ref=e321]: 04:32Them:Finance is fine with twenty, just not with a free month on top.
+          - paragraph [ref=e322]: 04:39Them:I can draft the launch email once legal is through.
+          - paragraph [ref=e323]: 04:46You:Great, let’s lock Tuesday then.
+    - generic [ref=e325]:
+      - generic [ref=e326]:
+        - heading "Pricing" [level=2] [ref=e327]
+        - paragraph [ref=e328]: Other AI meeting copilots charge a monthly fee for the cloud model. Sotto uses the one your Mac already paid for.
+      - generic [ref=e329]:
+        - generic [ref=e330]:
+          - paragraph [ref=e331]: Pro
+          - paragraph [ref=e332]: Unlimited access.
+          - paragraph [ref=e333]: $19.99 / month
+          - paragraph [ref=e334]: Free.
+          - paragraph [ref=e335]: Forever. It’s open source.
+        - list [ref=e336]:
+          - listitem [ref=e337]:
+            - img [ref=e338]
+            - text: Unlimited meetings
+          - listitem [ref=e340]:
+            - img [ref=e341]
+            - text: Unlimited questions mid-call
+          - listitem [ref=e343]:
+            - img [ref=e344]
+            - text: Notes, action items and decisions
+          - listitem [ref=e346]:
+            - img [ref=e347]
+            - text: Full meeting history
+          - listitem [ref=e349]:
+            - img [ref=e350]
+            - text: No account, no API key, no card
+        - link "Download for Mac" [ref=e352] [cursor=pointer]:
+          - /url: https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip
+          - img [ref=e353]
+          - text: Download for Mac
+    - generic [ref=e356]:
+      - heading "Questions" [level=2] [ref=e358]
+      - generic [ref=e359]:
+        - group [ref=e360]:
+          - generic "Is it really free? +" [ref=e361] [cursor=pointer]
+          - paragraph [ref=e362]: Yes. Sotto is open source under the MIT license. There’s no account, no subscription and no server, because the AI is the one Apple already put on your Mac.
+        - group [ref=e363]:
+          - generic "Which Macs does it run on? +" [ref=e364] [cursor=pointer]
+        - group [ref=e365]:
+          - generic "What permissions does it need? +" [ref=e366] [cursor=pointer]
+        - group [ref=e367]:
+          - generic "Can people on the call tell? +" [ref=e368] [cursor=pointer]
+        - group [ref=e369]:
+          - generic "How good is it, honestly? +" [ref=e370] [cursor=pointer]
+        - group [ref=e371]:
+          - generic "Which languages? +" [ref=e372] [cursor=pointer]
+    - generic [ref=e374]:
+      - heading "Your Mac already has the AI. Put it to work." [level=2] [ref=e375]
+      - paragraph [ref=e376]: Free, 0.8 MB, and nothing else to download. Ever.
+      - list [ref=e377]:
+        - listitem [ref=e378]:
+          - generic [ref=e379]: Download Sotto.zip and open it.
+        - listitem [ref=e380]:
+          - generic [ref=e381]: Drag Sotto into Applications.
+        - listitem [ref=e382]:
+          - generic [ref=e383]: Open it. macOS will say it can’t verify the developer, because Sotto isn’t notarized yet. Go to System Settings → Privacy & Security and click Open Anyway. Once.
+      - generic [ref=e384]:
+        - link "Download for Mac" [ref=e385] [cursor=pointer]:
+          - /url: https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip
+          - img [ref=e386]
+          - text: Download for Mac
+        - link "Or build it from source →" [ref=e388] [cursor=pointer]:
+          - /url: https://github.com/JiyauddinSaiyad/sotto#build-and-run
+      - generic [ref=e389]:
+        - paragraph [ref=e390]: Rather skip the warning? Paste this in Terminal. Files fetched with curl aren’t quarantined, so macOS opens Sotto straight away.
+        - generic [ref=e391]:
+          - code [ref=e392]: curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip && ditto -xk /tmp/Sotto.zip /Applications && open /Applications/Sotto.app
+          - button "Copy command" [ref=e393] [cursor=pointer]: Copy
+  - contentinfo [ref=e394]:
+    - generic [ref=e395]:
+      - generic [ref=e396]:
+        - generic [ref=e397]:
+          - link "sotto" [ref=e398] [cursor=pointer]:
+            - /url: "#top"
+          - paragraph [ref=e399]: A whole meeting copilot in a 0.8 MB download.
+        - generic [ref=e400]:
+          - heading "Product" [level=4] [ref=e401]
+          - link "How it helps" [ref=e402] [cursor=pointer]:
+            - /url: "#helps"
+          - link "Notes" [ref=e403] [cursor=pointer]:
+            - /url: "#notes"
+          - link "Privacy" [ref=e404] [cursor=pointer]:
+            - /url: "#private"
+          - link "Pricing" [ref=e405] [cursor=pointer]:
+            - /url: "#pricing"
+          - link "FAQ" [ref=e406] [cursor=pointer]:
+            - /url: "#faq"
+        - generic [ref=e407]:
+          - heading "Project" [level=4] [ref=e408]
+          - link "Source code" [ref=e409] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto
+          - link "README" [ref=e410] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto#readme
+          - link "MIT license" [ref=e411] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto/blob/main/LICENSE
+        - generic [ref=e412]:
+          - heading "Support" [level=4] [ref=e413]
+          - link "Report a bug" [ref=e414] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto/issues
+          - link "Discussions" [ref=e415] [cursor=pointer]:
+            - /url: https://github.com/JiyauddinSaiyad/sotto/discussions
+      - generic [ref=e416]:
+        - generic [ref=e417]: © 2026 Jiyauddin Saiyad · MIT
+        - link "Sotto on GitHub" [ref=e418] [cursor=pointer]:
+          - /url: https://github.com/JiyauddinSaiyad/sotto
+          - img [ref=e419]

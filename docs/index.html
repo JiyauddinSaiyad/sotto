@@ -324,6 +324,17 @@ section.soft .btile { background: #fff; }
   -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); }
 .tpanel .stamp { font-family: var(--mono); font-size: 11px; color: var(--glass-muted); margin-right: 8px; }
 
+/* pricing */
+.price-card { max-width: 440px; margin: 0 auto; padding: 36px; border-radius: var(--r-tile); background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow-card), 0 30px 80px -30px rgba(113,99,255,.35); text-align: center; display: grid; gap: 28px; }
+.price-card .plan { font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.price-card .was { margin-top: 18px; font-size: 26px; font-weight: 500; color: var(--text-muted); }
+.price-card .was s { text-decoration-color: var(--rec); text-decoration-thickness: 3px; }
+.price-card .now { font-size: 72px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin: 6px 0 10px; }
+.price-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; text-align: left; }
+.price-card li { display: flex; gap: 10px; align-items: center; }
+.price-card li .i { color: var(--success); width: 18px; height: 18px; }
+.price-card .cta { justify-self: center; }
+
 /* faq */
 .faq { max-width: 760px; margin: 0 auto; }
 .faq details { border-bottom: 1px solid var(--border); }
@@ -345,12 +356,20 @@ section.soft .btile { background: #fff; }
 .steps b { color: var(--text); font-weight: 600; }
 .ctas-c { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
 
+.oneliner { max-width: 640px; margin: 48px auto 0; text-align: left; font-size: 15px; color: var(--text-muted); }
+.oneliner b { color: var(--text); }
+.cmd { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 12px 12px 12px 16px; border-radius: 12px; background: #0f1222; color: #e8e9f0; }
+.cmd code { flex: 1; background: none; padding: 0; color: inherit; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.cmd button { flex: none; padding: 6px 12px; border-radius: 8px; background: rgba(255,255,255,.12); font-size: 13px; font-weight: 500; }
+.cmd button:hover { background: rgba(255,255,255,.2); }
+
 /* footer */
 footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 14px; }
 .fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
 .fcols h4 { margin: 0 0 14px; font-size: 13px; font-weight: 600; }
 .fcols a { display: block; color: var(--text-muted); padding: 4px 0; }
 .fcols a:hover { color: var(--text); }
+.fcols a.logo { display: flex; color: var(--text); }
 .fbase { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
 .fbase a svg { width: 20px; height: 20px; fill: currentColor; }
 
@@ -397,6 +416,7 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     <symbol id="sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
     <symbol id="file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
     <symbol id="download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
     <symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
   </defs>
 </svg>
@@ -408,6 +428,7 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
       <a href="#helps">How it helps</a>
       <a href="#notes">Notes</a>
       <a href="#private">Privacy</a>
+      <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="cta small" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download</a>
@@ -611,6 +632,24 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
   </div>
 </section>
 
+<!-- ================= pricing ================= -->
+<section class="s" id="pricing">
+  <div class="wrap">
+    <div class="head reveal"><h2>Pricing</h2><p>Other AI meeting copilots charge a monthly fee for the cloud model. Sotto uses the one your Mac already paid for.</p></div>
+    <div class="price-card reveal">
+      <div style="--i:0">
+        <p class="plan">Pro</p>
+        <p class="muted">Unlimited access.</p>
+        <p class="was"><s>$19.99 / month</s></p>
+        <p class="now grad">Free.</p>
+        <p class="muted" style="font-size:14px">Forever. It’s open source.</p>
+      </div>
+      <ul style="--i:1"><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Unlimited meetings</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Unlimited questions mid-call</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Notes, action items and decisions</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Full meeting history</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>No account, no API key, no card</li></ul>
+      <a class="cta" style="--i:2" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
+    </div>
+  </div>
+</section>
+
 <!-- ================= faq ================= -->
 <section class="s soft" id="faq">
   <div class="wrap">
@@ -638,6 +677,10 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     </ol>
     <div class="ctas-c" style="--i:3"><a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
       <a class="ghost" data-repo="#build-and-run" href="#get">Or build it from source →</a></div>
+    <div class="oneliner" style="--i:4">
+      <p><b>Rather skip the warning?</b> Paste this in Terminal. Files fetched with curl aren’t quarantined, so macOS opens Sotto straight away.</p>
+      <div class="cmd"><code id="cmd">curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip &amp;&amp; ditto -xk /tmp/Sotto.zip /Applications &amp;&amp; open /Applications/Sotto.app</code><button id="copy" aria-label="Copy command">Copy</button></div>
+    </div>
   </div>
 </section>
 
@@ -650,7 +693,7 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
         <a class="logo" href="#top" style="padding:0"><img class="mk" src="mark.png" alt="">sotto</a>
         <p class="muted" style="margin-top:12px;max-width:32ch">A whole meeting copilot in a 0.8 MB download.</p>
       </div>
-      <div><h4>Product</h4><a href="#helps">How it helps</a><a href="#notes">Notes</a><a href="#private">Privacy</a><a href="#faq">FAQ</a></div>
+      <div><h4>Product</h4><a href="#helps">How it helps</a><a href="#notes">Notes</a><a href="#private">Privacy</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
       <div><h4>Project</h4><a data-repo href="#get">Source code</a><a data-repo="#readme" href="#get">README</a><a data-repo="/blob/main/LICENSE" href="#get">MIT license</a></div>
       <div><h4>Support</h4><a data-repo="/issues" href="#get">Report a bug</a><a data-repo="/discussions" href="#get">Discussions</a></div>
     </div>
@@ -693,6 +736,11 @@ const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&g
 // Repo links
 if (REPO) {
   document.querySelectorAll('[data-repo]').forEach(a => { a.href = REPO + (a.dataset.repo || '') })
+}
+
+$('#copy').onclick = async e => {
+  try { await navigator.clipboard.writeText($('#cmd').textContent); e.target.textContent = 'Copied' } catch { e.target.textContent = 'Select & copy' }
+  setTimeout(() => { e.target.textContent = 'Copy' }, 1600)
 }
 
 // Mobile menu

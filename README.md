@@ -49,6 +49,12 @@ Sotto checks this at launch and tells you plainly if something's missing.
 2. Drag **Sotto** into **Applications**.
 3. Open it. macOS will say it can't verify the developer, because Sotto isn't notarized yet. Go to **System Settings → Privacy & Security** and click **Open Anyway**. You only do this once.
 
+Rather skip that warning? Paste this in Terminal. Files fetched with `curl` aren't quarantined, so macOS opens Sotto straight away:
+
+```sh
+curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip && ditto -xk /tmp/Sotto.zip /Applications && open /Applications/Sotto.app
+```
+
 ## Build and run
 
 Prefer to build it yourself? You'll need Xcode.
