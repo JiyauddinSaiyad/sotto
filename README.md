@@ -106,6 +106,35 @@ Ours: all 2,620 utterances, 52,576 words, 5.4 hours of audio in 6.6 minutes. *Wh
 
 **Footprint:** 0.8 MB download, 1.6 MB installed, ~85 MB RAM mid-meeting (the model lives in macOS, not in Sotto), 0 dependencies.
 
+## How it compares
+
+There are great open-source meeting tools. Every one we checked asks you to download a model or paste an API key first.
+
+| Open-source app | Mac download | What you set up before it works |
+|---|---|---|
+| **Sotto** | **0.8 MB** | **Nothing. It uses the AI built into macOS.** |
+| [Meetily](https://github.com/Zackriya-Solutions/meetily) | 45 MB | A Whisper or Parakeet model, plus Ollama or an API key for summaries |
+| [Anarlog](https://github.com/fastrepl/anarlog) | 201 MB | A local model server, your own API key, or their hosted plan |
+| [cheating-daddy](https://github.com/sohzm/cheating-daddy) | 92 MB | A Gemini API key |
+| [Pluely](https://github.com/iamsrikanthnani/pluely) | 13 MB | Your API key, an AI CLI, or a paid plan |
+| [free-cluely](https://github.com/Prat011/free-cluely) | Build from source | A Gemini API key or Ollama |
+| [OpenCluely](https://github.com/TechyCSR/OpenCluely) | Setup script | A Gemini API key, plus a local Whisper install |
+
+The six most-starred open-source alternatives on GitHub, checked on Oct 26, 2026 against each project's README and latest release.
+
+And the paid ones:
+
+| App | Paid plan | Hide from screen share | Free tier |
+|---|---|---|---|
+| **Sotto** | **Free** | **Free, opt-in** | **Everything, unlimited** |
+| Cluely | $19.99/mo (Pro) | $149.99/mo plan | Starter, limited |
+| Final Round AI | $25/mo (Pro) | In Pro | No live copilot |
+| Parakeet AI | ₹9,470/mo unlimited† | – | One 10-minute session |
+| Granola | $14/user/mo (Business) | – | 30 days of meeting history |
+| Otter.ai | $16.99/user/mo (Pro) | – | 300 min/month, 30 min per meeting |
+
+Prices from each company's own pricing page on Oct 26, 2026, monthly billing; "–" means not offered on that page. †Parakeet AI prices by region; this is what its page showed us. If anything here is out of date, open an issue and we'll fix it.
+
 ## Honest limitations
 
 Sotto runs on Apple's small (~3B parameter) on-device model. That's what makes it free and private, and it also sets the ceiling:

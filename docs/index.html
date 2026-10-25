@@ -380,6 +380,27 @@ section.soft .btile { background: #fff; }
 .win .tag { display: inline-block; margin-right: 8px; padding: 2px 10px; border-radius: var(--r-pill); background: #e8f1ff; color: #0a64d6; font-size: 13px; font-weight: 600; }
 .win a { color: var(--text); font-weight: 500; }
 
+.cmp { max-width: 980px; margin: 0 auto; }
+.cmp table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.cmp th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); padding: 0 16px 12px 0; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.cmp td { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+.cmp td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; }
+.cmp td:nth-child(2) { font-family: var(--mono); font-size: 13.5px; white-space: nowrap; }
+.cmp td a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
+.cmp tr.us td { color: var(--text); font-weight: 600; background: rgba(113,99,255,.07); }
+.cmp tr.us td:first-child { padding-left: 12px; border-radius: 10px 0 0 10px; }
+.cmp tr.us td:last-child { border-radius: 0 10px 10px 0; }
+.cmp th:first-child { padding-left: 12px; }
+.cmp td:first-child { padding-left: 12px; }
+.cmp .yes, .cmp .no { display: inline-block; padding: 2px 10px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; }
+.cmp .yes { background: #e8f8ee; color: #15803d; }
+.cmp .no { background: var(--bg-soft); color: var(--text-muted); }
+.cmp-h { margin: 40px 0 14px; font-size: 20px; }
+.cmp-h:first-child { margin-top: 0; }
+.cmp table.paid td:nth-child(2) { font-family: inherit; font-size: 15px; }
+.cmp .fine { margin-top: 16px; font-size: 13px; color: var(--text-muted); }
+.cmp .fine a { color: var(--accent); }
+
 /* faq */
 .faq { max-width: 760px; margin: 0 auto; }
 .faq details { border-bottom: 1px solid var(--border); }
@@ -455,6 +476,18 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
   .hero { padding: 56px 0 96px; }
   .dock { display: none; }
   .btile { padding: 22px; }
+  .cmp thead { display: none; }
+  .cmp table, .cmp tbody, .cmp tr { display: block; }
+  .cmp tr { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px 12px; border-bottom: 1px solid var(--border); }
+  .cmp td { display: block; padding: 0 !important; border: 0; background: none !important; }
+  .cmp td:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .cmp td:nth-child(3) { grid-column: 1 / -1; grid-row: 3; }
+  .cmp td:nth-child(4) { grid-column: 2; grid-row: 1; }
+  .cmp tr.us { border-radius: 12px; background: rgba(113,99,255,.07); }
+  .cmp .paid td:nth-child(2) { grid-column: 2; grid-row: 1; text-align: right; }
+  .cmp .paid td:nth-child(3) { grid-column: 1 / -1; grid-row: 2; }
+  .cmp .paid td:nth-child(4) { grid-column: 1 / -1; grid-row: 3; }
+  .cmp .paid td[data-l]::before { content: attr(data-l) ": "; color: var(--text-muted); font-weight: 400; }
   .vs { flex-direction: column; align-items: center; gap: 6px; }
   .vs s { font-size: 16px; }
   .vs b { font-size: 20px; }
@@ -492,6 +525,7 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
       <a href="#helps">How it helps</a>
       <a href="#why">Why</a>
       <a href="#benchmarks">Benchmarks</a>
+      <a href="#compare">Compare</a>
       <a href="#notes">Notes</a>
       <a href="#private">Privacy</a>
       <a href="#faq">FAQ</a>
@@ -651,6 +685,42 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
       <div style="--i:2"><b>~85 MB</b><span>RAM mid-meeting</span></div>
       <div style="--i:3"><b>0</b><span>bytes of audio leave your Mac</span></div>
       <div style="--i:4"><b>0</b><span>dependencies</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= compare ================= -->
+<section class="s" id="compare">
+  <div class="wrap">
+    <div class="head reveal"><h2>The only one that needs nothing</h2><p>Open-source meeting tools make you download a model or paste an API key. Paid ones make you pay monthly. Sotto does neither.</p></div>
+    <div class="cmp reveal">
+      <h3 class="cmp-h" style="--i:0">Open-source apps</h3>
+      <div class="tscroll" style="--i:0"><table>
+        <thead><tr><th>Open-source app</th><th>Mac download</th><th>What you set up before it works</th><th>Works out of the box</th></tr></thead>
+        <tbody>
+            <tr class="us"><td>Sotto</td><td>0.8 MB</td><td>Nothing. It uses the AI built into macOS.</td><td><span class="yes">Yes</span></td></tr>
+            <tr><td><a href="https://github.com/Zackriya-Solutions/meetily">Meetily</a></td><td>45 MB</td><td>A Whisper or Parakeet model, plus Ollama or an API key for summaries</td><td><span class="no">No</span></td></tr>
+            <tr><td><a href="https://github.com/fastrepl/anarlog">Anarlog</a></td><td>201 MB</td><td>A local model server, your own API key, or their hosted plan</td><td><span class="no">No</span></td></tr>
+            <tr><td><a href="https://github.com/sohzm/cheating-daddy">cheating-daddy</a></td><td>92 MB</td><td>A Gemini API key</td><td><span class="no">No</span></td></tr>
+            <tr><td><a href="https://github.com/iamsrikanthnani/pluely">Pluely</a></td><td>13 MB</td><td>Your API key, an AI CLI, or a paid plan</td><td><span class="no">No</span></td></tr>
+            <tr><td><a href="https://github.com/Prat011/free-cluely">free-cluely</a></td><td>Build from source</td><td>A Gemini API key or Ollama</td><td><span class="no">No</span></td></tr>
+            <tr><td><a href="https://github.com/TechyCSR/OpenCluely">OpenCluely</a></td><td>Setup script</td><td>A Gemini API key, plus a local Whisper install</td><td><span class="no">No</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine" style="--i:1">The six most-starred open-source alternatives on GitHub, checked on Oct 26, 2026 against each project’s README and latest release.</p>
+      <h3 class="cmp-h" style="--i:2">Paid apps</h3>
+      <div class="tscroll" style="--i:3"><table class="paid">
+        <thead><tr><th>App</th><th>Paid plan</th><th>Hide from screen share</th><th>Free tier</th></tr></thead>
+        <tbody>
+            <tr class="us"><td>Sotto</td><td>Free</td><td data-l="Hide from screen share">Free, opt-in</td><td data-l="Free tier">Everything, unlimited</td></tr>
+            <tr><td>Cluely</td><td>$19.99/mo (Pro)</td><td data-l="Hide from screen share">$149.99/mo plan</td><td data-l="Free tier">Starter, limited</td></tr>
+            <tr><td>Final Round AI</td><td>$25/mo (Pro)</td><td data-l="Hide from screen share">In Pro</td><td data-l="Free tier">No live copilot</td></tr>
+            <tr><td>Parakeet AI</td><td>₹9,470/mo unlimited<sup>†</sup></td><td data-l="Hide from screen share">–</td><td data-l="Free tier">One 10-minute session</td></tr>
+            <tr><td>Granola</td><td>$14/user/mo (Business)</td><td data-l="Hide from screen share">–</td><td data-l="Free tier">30 days of meeting history</td></tr>
+            <tr><td>Otter.ai</td><td>$16.99/user/mo (Pro)</td><td data-l="Hide from screen share">–</td><td data-l="Free tier">300 min/month, 30 min per meeting</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine" style="--i:4">Prices from each company’s own pricing page on Oct 26, 2026, monthly billing; “–” means not offered on that page. <sup>†</sup>Parakeet AI prices by region; this is what its page showed us. Spotted something out of date? <a data-repo="/issues" href="#get">Tell us</a>.</p>
     </div>
   </div>
 </section>
