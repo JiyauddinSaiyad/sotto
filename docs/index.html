@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sotto — a meeting copilot in a 0.8 MB download</title>
-<meta name="description" content="A whole meeting copilot in a 0.8 MB download. Live transcript, answers mid-call and notes afterwards, on the Apple Intelligence already built into your Mac. Free and open source.">
+<title>Sotto — a free meeting copilot in a 0.8 MB download</title>
+<meta name="description" content="A free meeting copilot in a 0.8 MB download. Live transcript, answers mid-call and notes afterwards, on the Apple Intelligence already built into your Mac. Free and open source.">
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,6 +99,14 @@ p { margin: 0; }
 .grad { background: var(--brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .sub { margin: 22px auto 0; max-width: 56ch; font-size: 19px; color: var(--text-muted); }
 .hero .ctas { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+.vs { display: flex; justify-content: center; gap: 8px 28px; flex-wrap: wrap; margin-top: 22px; font-size: 15px; font-weight: 600; }
+.vs i { font-style: normal; font-weight: 500; color: var(--text-muted); margin-right: 8px; }
+.vs b { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.vs > span { display: inline-flex; align-items: baseline; }
+.vs i::after { content: ":"; }
+.vs s { margin-right: 8px; font-size: 18px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; text-decoration-color: var(--rec); text-decoration-thickness: 3px; }
+.vs b { font-size: 24px; }
+.vs s, .vs b, .vs i { white-space: nowrap; }
 .hero .req { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 
 /* ---------- mac desktop mockup ---------- */
@@ -324,16 +332,53 @@ section.soft .btile { background: #fff; }
   -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); }
 .tpanel .stamp { font-family: var(--mono); font-size: 11px; color: var(--glass-muted); margin-right: 8px; }
 
-/* pricing */
-.price-card { max-width: 440px; margin: 0 auto; padding: 36px; border-radius: var(--r-tile); background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow-card), 0 30px 80px -30px rgba(113,99,255,.35); text-align: center; display: grid; gap: 28px; }
-.price-card .plan { font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.price-card .was { margin-top: 18px; font-size: 26px; font-weight: 500; color: var(--text-muted); }
-.price-card .was s { text-decoration-color: var(--rec); text-decoration-thickness: 3px; }
-.price-card .now { font-size: 72px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin: 6px 0 10px; }
-.price-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; text-align: left; }
-.price-card li { display: flex; gap: 10px; align-items: center; }
-.price-card li .i { color: var(--success); width: 18px; height: 18px; }
-.price-card .cta { justify-self: center; }
+/* benchmarks */
+.rig { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: -24px 0 36px; }
+.rig span { font-family: var(--mono); font-size: 12.5px; padding: 5px 12px; border-radius: var(--r-pill); background: var(--bg-soft); border: 1px solid var(--border); color: var(--text-muted); }
+.rig a { color: var(--accent); }
+.bgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.bcard { border-radius: var(--r-tile); border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow-card); padding: 32px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.bcard h3 { font-size: 22px; }
+.bcard .what { margin-top: -10px; font-size: 14px; color: var(--text-muted); }
+.big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.big b { display: block; font-size: 34px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.big span { font-size: 12.5px; color: var(--text-muted); }
+.bcard table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.bcard th { text-align: left; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); padding: 0 8px 8px 0; border-bottom: 1px solid var(--border); }
+.bcard td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 12.5px; }
+.bcard td:first-child { font-family: inherit; font-size: 13.5px; }
+.bcard td:not(:first-child), .bcard th { white-space: nowrap; }
+.tscroll { overflow-x: auto; }
+.bcard tr.us td { font-weight: 700; color: var(--accent); }
+.bcard .fine { margin-top: auto; font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+.bcard .fine a { color: var(--accent); }
+.footprint { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
+.footprint div { padding: 20px; border-radius: 18px; background: var(--bg-soft); border: 1px solid var(--border); text-align: center; }
+.footprint b { display: block; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.footprint span { font-size: 13px; color: var(--text-muted); }
+
+.wer { margin: 0; display: grid; gap: 10px; }
+.wer figcaption { font-size: 12.5px; color: var(--text-muted); margin-bottom: 4px; }
+.wer figcaption b { font-weight: 600; color: var(--text); }
+.wrow { display: grid; grid-template-columns: 128px 1fr 54px; align-items: center; gap: 12px; }
+.wl { font-size: 13.5px; line-height: 1.2; }
+.wl small { display: block; font-size: 11.5px; color: var(--text-muted); font-family: var(--mono); }
+.wt { height: 22px; border-radius: 6px; background: var(--bg-soft); overflow: hidden; }
+.wt i { display: block; height: 100%; border-radius: 0 4px 4px 0; background: #c3c7d1; transform-origin: left; transition: transform .8s var(--ease); }
+.wv { font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.wrow.us .wt i { background: var(--brand); }
+.wrow.us .wl, .wrow.us .wv { font-weight: 700; }
+.wrow:hover .wt i { filter: brightness(.92); }
+.reveal:not(.in) .wt i { transform: scaleX(0); }
+
+.why { display: grid; grid-template-columns: 1fr 1.6fr; gap: 56px; align-items: start; }
+.why h2 { font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; position: sticky; top: 100px; }
+.why-body { display: grid; gap: 18px; font-size: 18px; color: var(--text-muted); max-width: 62ch; }
+.why-body b { color: var(--text); }
+.why-body .lede { font-size: 24px; line-height: 1.4; color: var(--text); font-weight: 500; letter-spacing: -0.01em; }
+.win { padding-top: 18px; border-top: 1px solid var(--border); font-size: 16px; }
+.win .tag { display: inline-block; margin-right: 8px; padding: 2px 10px; border-radius: var(--r-pill); background: #e8f1ff; color: #0a64d6; font-size: 13px; font-weight: 600; }
+.win a { color: var(--text); font-weight: 500; }
 
 /* faq */
 .faq { max-width: 760px; margin: 0 auto; }
@@ -349,14 +394,22 @@ section.soft .btile { background: #fff; }
 .get { text-align: center; }
 .get h2 { font-size: clamp(34px, 5vw, 56px); line-height: 1.08; max-width: 18ch; margin: 0 auto; letter-spacing: -0.03em; }
 .get .sub { margin: 18px auto 0; max-width: 52ch; color: var(--text-muted); font-size: 18px; }
-.steps { max-width: 560px; margin: 36px auto 32px; padding: 0; list-style: none; counter-reset: s; text-align: left; display: grid; gap: 14px; }
+.steps { max-width: 560px; margin: 20px auto 32px; padding: 0; list-style: none; counter-reset: s; text-align: left; display: grid; gap: 14px; }
 .steps li { counter-increment: s; display: flex; gap: 14px; align-items: baseline; color: var(--text-muted); }
 .steps li::before { transform: translateY(-1px); }
 .steps li::before { content: counter(s); flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-weight: 600; }
 .steps b { color: var(--text); font-weight: 600; }
 .ctas-c { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
 
-.oneliner { max-width: 640px; margin: 48px auto 0; text-align: left; font-size: 15px; color: var(--text-muted); }
+.hero-cmd { max-width: 680px; margin: 30px auto 0; }
+.hero-cmd p { margin-top: 12px; font-size: 14px; color: var(--text-muted); }
+.hero-cmd p a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border); }
+.cmd code::before { content: "$ "; color: rgba(255,255,255,.4); }
+.or { margin-top: 44px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.thanks { margin-top: 40px; color: var(--text-muted); font-size: 15px; }
+.coffee { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--r-pill); background: #ffdd00; color: #0f1222; font-weight: 600; }
+.coffee:hover { filter: brightness(.96); }
+.oneliner { max-width: 680px; margin: 36px auto 0; text-align: left; font-size: 15px; color: var(--text-muted); }
 .oneliner b { color: var(--text); }
 .cmd { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 12px 12px 12px 16px; border-radius: 12px; background: #0f1222; color: #e8e9f0; }
 .cmd code { flex: 1; background: none; padding: 0; color: inherit; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
@@ -384,7 +437,13 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
   .nav-links a { padding: 12px 0; }
   .menu-btn { display: block; }
   .nav .cta { display: none; }
-  .two, .bento, .stats { grid-template-columns: minmax(0, 1fr); }
+  .two, .bento, .stats, .bgrid, .why { grid-template-columns: minmax(0, 1fr); }
+  .why { gap: 24px; }
+  .why h2 { position: static; }
+  .footprint { grid-template-columns: repeat(2, 1fr); }
+  .footprint div:last-child { grid-column: 1 / -1; }
+  .bcard { padding: 22px; }
+  .big b { font-size: 26px; }
   .fcols { grid-template-columns: 1fr 1fr; }
   .notes { height: auto; display: grid; gap: 16px; }
   .note, .note:nth-child(n), .notes.in .note:nth-child(n) { position: static; width: 100%; transform: none; }
@@ -396,6 +455,10 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
   .hero { padding: 56px 0 96px; }
   .dock { display: none; }
   .btile { padding: 22px; }
+  .vs { flex-direction: column; align-items: center; gap: 6px; }
+  .vs s { font-size: 16px; }
+  .vs b { font-size: 20px; }
+  .vs .hide-sm { display: none; }
   .split { grid-template-columns: 1fr; }
   .feat .demo { height: 320px; padding: 16px; }
   .fbase { flex-direction: column; }
@@ -416,7 +479,8 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     <symbol id="sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
     <symbol id="file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
     <symbol id="download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
-    <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="terminal" viewBox="0 0 24 24"><path d="M12 19h8"/><path d="m4 17 6-6-6-6"/></symbol>
+    <symbol id="coffee" viewBox="0 0 24 24"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></symbol>
     <symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
   </defs>
 </svg>
@@ -426,12 +490,13 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     <a class="logo" href="#top" aria-label="Sotto home"><img class="mk" src="mark.png" alt="">sotto</a>
     <nav class="nav-links" id="menu">
       <a href="#helps">How it helps</a>
+      <a href="#why">Why</a>
+      <a href="#benchmarks">Benchmarks</a>
       <a href="#notes">Notes</a>
       <a href="#private">Privacy</a>
-      <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="cta small" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download</a>
+    <a class="cta small" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#terminal"/></svg>Install</a>
     <button class="menu-btn" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -441,13 +506,13 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
 <!-- ================= hero ================= -->
 <section class="hero">
   <div class="wrap reveal">
-    <h1 style="--i:0">A whole meeting copilot in a <span class="grad">0.8 MB</span> download.</h1>
-    <p class="sub" style="--i:2">Other AI note-takers ship gigabytes of models or send your calls to a server. Sotto transcribes, answers mid-meeting and writes your notes with the Apple Intelligence already built into your Mac.</p>
-    <div class="ctas" style="--i:3">
-      <a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
-      <a class="ghost" data-repo href="#get">View on GitHub →</a>
+    <h1 style="--i:0">A <span class="grad">free</span> meeting copilot in a <span class="grad">0.8&nbsp;MB</span> download.</h1>
+    <p class="sub" style="--i:1">Live transcripts, answers mid-call and notes afterwards, on the Apple Intelligence already in your Mac.</p>
+    <p class="vs" style="--i:2"><span><i>Price</i><s>$19.99/mo</s><b class="grad">Free</b></span><span><i>Stealth mode</i><s>up to $149.99/mo</s><b class="grad">Free</b></span><span><i>Download</i><s>gigabytes<span class="hide-sm">, or their cloud</span></s><b class="grad">0.8 MB</b></span></p>
+    <div class="hero-cmd" style="--i:3">
+      <div class="cmd"><code>curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip &amp;&amp; ditto -xk /tmp/Sotto.zip /Applications &amp;&amp; open /Applications/Sotto.app</code><button aria-label="Copy install command">Copy</button></div>
+      <p>Paste in Terminal, no security warning · <a href="#get">Download</a> · <a data-repo href="#get">GitHub</a> · Apple silicon, macOS 26+</p>
     </div>
-    <p class="req" style="--i:4">Apple silicon · macOS 26 or later · Apple Intelligence on</p>
   </div>
 
   <div class="wrap">
@@ -522,6 +587,70 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
         </div>
         <p class="lead"><strong>Answers in a second or two.</strong> Press ⌘↵ for Assist, tap “What should I say?”, or ask anything about the conversation.</p>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= why ================= -->
+<section class="s" id="why">
+  <div class="wrap why reveal">
+    <h2 style="--i:0">Why we built it</h2>
+    <div class="why-body" style="--i:1">
+      <p class="lede">Your Mac already has a speech recognizer and a ~3B-parameter language model. Apple put them there. Almost nobody uses them.</p>
+      <p>Meanwhile, AI meeting copilots charge $19.99 a month, upsell “stealth” at up to $149.99, and stream your calls to their servers to run models you’re renting. That felt backwards. So we asked one question: how far does the AI that’s already on your Mac go?</p>
+      <p><b>That’s why it’s free.</b> The AI is already built into your Mac. We pay for no servers, so you pay us nothing.</p>
+      <p>Further than we expected. 2.06% word error rate. First word of an answer in 0.4 s. Notes in about five seconds. All of it in a 0.8 MB app, because the heavy parts were never ours to ship.</p>
+      <p>It isn’t a frontier model, and we won’t pretend it is. It’s great for summaries, follow-ups and “what was that number again?”, not for deep reasoning. Everyone else on the call shows up as “Them”, because Apple’s speech APIs don’t separate speakers yet. Names get misheard. Only English has been tested. We’d rather tell you now than have you find out mid-call.</p>
+      <p class="win"><span class="tag">Windows: coming soon</span> Copilot+ PCs ship their own on-device model (Phi Silica), so the same idea works there. <a data-repo="/discussions" href="#get">Tell us you want it →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= benchmarks ================= -->
+<section class="s soft" id="benchmarks">
+  <div class="wrap">
+    <div class="head reveal"><h2>Benchmarks</h2><p>Why does a 0.8 MB app work? Because the models already shipped with macOS. Here’s how they run on the cheapest Mac that has them.</p></div>
+
+    <div class="rig reveal"><span style="--i:0">M4 MacBook Air</span><span style="--i:1">16 GB · fanless</span><span style="--i:2">macOS 27.0.1</span><span style="--i:3">medians of 5 runs</span><span style="--i:4"><a data-repo="/tree/main/bench" href="#get">reproduce: bench/ →</a></span></div>
+
+    <div class="bgrid reveal">
+      <article class="bcard" style="--i:0">
+        <h3>Language model</h3>
+        <p class="what">Apple Foundation Models, on-device ~3B · tokens counted with Apple’s own tokenizer</p>
+        <div class="big"><div><b>42</b><span>tok/s sustained decode</span></div><div><b>1,127</b><span>tok/s prefill</span></div><div><b>0.4</b><span>s to first token</span></div></div>
+        <div class="tscroll"><table>
+          <thead><tr><th>Workload</th><th>In</th><th>Out</th><th>TTFT</th><th>Prefill</th><th>Decode</th></tr></thead>
+          <tbody>
+            <tr><td>Short answer</td><td>11</td><td>33</td><td>0.42 s</td><td>–</td><td>55 tok/s</td></tr>
+            <tr><td>Long answer</td><td>17</td><td>434</td><td>0.37 s</td><td>–</td><td>42 tok/s</td></tr>
+            <tr><td>Recap, 1K-token transcript</td><td>818</td><td>136</td><td>0.79 s</td><td>1,032 tok/s</td><td>35 tok/s</td></tr>
+            <tr><td>Recap, 3K-token transcript</td><td>2,578</td><td>133</td><td>2.29 s</td><td>1,127 tok/s</td><td>26 tok/s</td></tr>
+          </tbody>
+        </table></div>
+        <p class="fine">Context window 8,192 tokens. First request after launch: 3.75 s cold start. On a fanless Air a hot machine runs up to ~40% slower; we saw it.</p>
+      </article>
+
+      <article class="bcard" style="--i:1">
+        <h3>Speech to text</h3>
+        <p class="what">Apple SpeechTranscriber · LibriSpeech test-clean, the set every ASR paper reports</p>
+        <div class="big"><div><b>2.06%</b><span>word error rate</span></div><div><b>49×</b><span>faster than real time</span></div><div><b>0</b><span>MB of models shipped</span></div></div>
+        <figure class="wer" aria-label="Word error rate on LibriSpeech test-clean, lower is better">
+          <figcaption>Word error rate, LibriSpeech test-clean <b>· lower is better</b></figcaption>
+          <div class="wrow us" title="Sotto: 2.06% WER, ships 0 MB"><span class="wl">Sotto<small>0 MB</small></span><span class="wt"><i style="width:25.8%"></i></span><span class="wv">2.06%</span></div>
+          <div class="wrow" title="Whisper Small: 3.74% WER, ships 466 MB"><span class="wl">Whisper Small<sup>*</sup><small>466 MB</small></span><span class="wt"><i style="width:46.8%"></i></span><span class="wv">3.74%</span></div>
+          <div class="wrow" title="Whisper Base: 5.42% WER, ships 142 MB"><span class="wl">Whisper Base<sup>*</sup><small>142 MB</small></span><span class="wt"><i style="width:67.8%"></i></span><span class="wv">5.42%</span></div>
+          <div class="wrow" title="Whisper Tiny: 7.88% WER, ships 75 MB"><span class="wl">Whisper Tiny<sup>*</sup><small>75 MB</small></span><span class="wt"><i style="width:98.5%"></i></span><span class="wv">7.88%</span></div>
+        </figure>
+        <p class="fine">Ours: all 2,620 utterances, 52,576 words, 5.4 hours of audio in 6.6 minutes. <sup>*</sup>Whisper rows are a <a href="https://www.developersdigest.tech/blog/apple-speechanalyzer-vs-whisper-benchmark">published third-party run</a> on an M2 Pro, not ours; it measured Apple’s recognizer at 2.12%. Whisper Large-v3 is reported around 2–2.7%, so roughly a tie, but it’s a ~3 GB model.</p>
+      </article>
+    </div>
+
+    <div class="footprint reveal">
+      <div style="--i:0"><b>0.8 MB</b><span>download</span></div>
+      <div style="--i:1"><b>1.6 MB</b><span>installed</span></div>
+      <div style="--i:2"><b>~85 MB</b><span>RAM mid-meeting</span></div>
+      <div style="--i:3"><b>0</b><span>bytes of audio leave your Mac</span></div>
+      <div style="--i:4"><b>0</b><span>dependencies</span></div>
     </div>
   </div>
 </section>
@@ -623,29 +752,11 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     <div class="reveal">
       <div class="stat" style="--i:0"><div class="n">0.8<span>MB</span></div><p class="l">The whole download</p><p class="p">Local Whisper models alone weigh 75 MB to 3 GB. Sotto ships none; it uses the speech recognizer and language model macOS already has.</p></div>
       <div class="stat" style="--i:1"><div class="n">$0</div><p class="l">Forever</p><p class="p">No subscription, no usage limits, MIT licensed. Your Mac already paid for the AI.</p></div>
-      <div class="stat" style="--i:2"><div class="n">1–3<span>s</span></div><p class="l">Typical answer time</p><p class="p">Measured on an M4 MacBook Air. Notes take about five seconds when you stop.</p></div>
+      <div class="stat" style="--i:2"><div class="n">0.4<span>s</span></div><p class="l">To the first word of an answer</p><p class="p">Measured on an M4 MacBook Air. A full recap of the call lands in about five seconds.</p></div>
     </div>
     <div class="glass tpanel reveal">
       <header style="--i:0"><span class="dot"></span>Real-time transcript<span class="t" data-timer>04:12</span></header>
       <div class="scroll" id="tscroll" style="--i:1"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= pricing ================= -->
-<section class="s" id="pricing">
-  <div class="wrap">
-    <div class="head reveal"><h2>Pricing</h2><p>Other AI meeting copilots charge a monthly fee for the cloud model. Sotto uses the one your Mac already paid for.</p></div>
-    <div class="price-card reveal">
-      <div style="--i:0">
-        <p class="plan">Pro</p>
-        <p class="muted">Unlimited access.</p>
-        <p class="was"><s>$19.99 / month</s></p>
-        <p class="now grad">Free.</p>
-        <p class="muted" style="font-size:14px">Forever. It’s open source.</p>
-      </div>
-      <ul style="--i:1"><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Unlimited meetings</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Unlimited questions mid-call</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Notes, action items and decisions</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>Full meeting history</li><li><svg class="i" aria-hidden="true"><use href="#check"/></svg>No account, no API key, no card</li></ul>
-      <a class="cta" style="--i:2" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
     </div>
   </div>
 </section>
@@ -670,17 +781,19 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
   <div class="wrap reveal">
     <h2 style="--i:0">Your Mac already has the AI. <span class="grad">Put it to work.</span></h2>
     <p class="sub" style="--i:1">Free, 0.8 MB, and nothing else to download. Ever.</p>
-    <ol class="steps" style="--i:2">
+    <div class="oneliner" style="--i:2">
+      <p><b>Install in one line.</b> Paste this in Terminal. Files fetched with curl aren’t quarantined, so macOS opens Sotto straight away.</p>
+      <div class="cmd"><code>curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip &amp;&amp; ditto -xk /tmp/Sotto.zip /Applications &amp;&amp; open /Applications/Sotto.app</code><button aria-label="Copy install command">Copy</button></div>
+    </div>
+    <p class="or" style="--i:3">Or download it the regular way</p>
+    <ol class="steps" style="--i:3">
       <li><span><b>Download</b> Sotto.zip and open it.</span></li>
       <li><span><b>Drag</b> Sotto into Applications.</span></li>
       <li><span><b>Open it.</b> macOS will say it can’t verify the developer, because Sotto isn’t notarized yet. Go to System Settings → Privacy &amp; Security and click <b>Open Anyway</b>. Once.</span></li>
     </ol>
-    <div class="ctas-c" style="--i:3"><a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
+    <div class="ctas-c" style="--i:4"><a class="cta" data-repo="/releases/latest/download/Sotto.zip" href="#get"><span class="shimmer"></span><svg class="i" aria-hidden="true"><use href="#download"/></svg>Download for Mac</a>
       <a class="ghost" data-repo="#build-and-run" href="#get">Or build it from source →</a></div>
-    <div class="oneliner" style="--i:4">
-      <p><b>Rather skip the warning?</b> Paste this in Terminal. Files fetched with curl aren’t quarantined, so macOS opens Sotto straight away.</p>
-      <div class="cmd"><code id="cmd">curl -sL https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip -o /tmp/Sotto.zip &amp;&amp; ditto -xk /tmp/Sotto.zip /Applications &amp;&amp; open /Applications/Sotto.app</code><button id="copy" aria-label="Copy command">Copy</button></div>
-    </div>
+    <p class="thanks" data-bmc hidden style="--i:5">Sotto is free and always will be. If it saves you a subscription, <a class="coffee" href="#"><svg class="i" aria-hidden="true"><use href="#coffee"/></svg>buy me a coffee</a>.</p>
   </div>
 </section>
 
@@ -691,11 +804,11 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
     <div class="fcols">
       <div>
         <a class="logo" href="#top" style="padding:0"><img class="mk" src="mark.png" alt="">sotto</a>
-        <p class="muted" style="margin-top:12px;max-width:32ch">A whole meeting copilot in a 0.8 MB download.</p>
+        <p class="muted" style="margin-top:12px;max-width:32ch">A free meeting copilot in a 0.8 MB download.</p>
       </div>
-      <div><h4>Product</h4><a href="#helps">How it helps</a><a href="#notes">Notes</a><a href="#private">Privacy</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+      <div><h4>Product</h4><a href="#helps">How it helps</a><a href="#why">Why we built it</a><a href="#benchmarks">Benchmarks</a><a href="#notes">Notes</a><a href="#private">Privacy</a><a href="#faq">FAQ</a></div>
       <div><h4>Project</h4><a data-repo href="#get">Source code</a><a data-repo="#readme" href="#get">README</a><a data-repo="/blob/main/LICENSE" href="#get">MIT license</a></div>
-      <div><h4>Support</h4><a data-repo="/issues" href="#get">Report a bug</a><a data-repo="/discussions" href="#get">Discussions</a></div>
+      <div><h4>Support</h4><a data-bmc hidden href="#">Buy me a coffee</a><a data-repo="/issues" href="#get">Report a bug</a><a data-repo="/discussions" href="#get">Discussions</a></div>
     </div>
     <div class="fbase"><span>© 2026 Jiyauddin Saiyad · MIT</span><a data-repo href="#get" aria-label="Sotto on GitHub"><svg><use href="#gh"/></svg></a></div>
   </div>
@@ -704,6 +817,8 @@ footer { border-top: 1px solid var(--border); padding: 64px 0 40px; font-size: 1
 <script>
 // Every GitHub link on the page hangs off this one string.
 const REPO = 'https://github.com/JiyauddinSaiyad/sotto'
+// Coffee links stay hidden until this has a real page in it.
+const BMC = 'https://buymeacoffee.com/jsaiyad'
 
 // All the fake meeting lives here, so nobody has to go spelunking in the DOM to change the demo.
 const MEETING = {
@@ -734,14 +849,18 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
 
 // Repo links
+if (BMC) document.querySelectorAll('[data-bmc]').forEach(el => {
+  el.hidden = false
+  ;(el.matches('a') ? el : el.querySelector('a')).href = BMC
+})
 if (REPO) {
   document.querySelectorAll('[data-repo]').forEach(a => { a.href = REPO + (a.dataset.repo || '') })
 }
 
-$('#copy').onclick = async e => {
-  try { await navigator.clipboard.writeText($('#cmd').textContent); e.target.textContent = 'Copied' } catch { e.target.textContent = 'Select & copy' }
-  setTimeout(() => { e.target.textContent = 'Copy' }, 1600)
-}
+document.querySelectorAll('.cmd button').forEach(b => b.onclick = async () => {
+  try { await navigator.clipboard.writeText(b.previousElementSibling.textContent); b.textContent = 'Copied' } catch { b.textContent = 'Select & copy' }
+  setTimeout(() => { b.textContent = 'Copy' }, 1600)
+})
 
 // Mobile menu
 const menuBtn = $('.menu-btn'), menu = $('#menu')

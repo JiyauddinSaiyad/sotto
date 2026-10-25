@@ -2,7 +2,7 @@
 
 <h1 align="center">Sotto</h1>
 
-<p align="center"><b>A whole meeting copilot in a 0.8 MB download.</b><br>
+<p align="center"><b>A free meeting copilot in a 0.8 MB download.</b><br>
 Live transcript, answers mid-call, and notes afterwards, all running on the AI already built into your Mac.</p>
 
 <p align="center"><a href="https://github.com/JiyauddinSaiyad/sotto/releases/latest/download/Sotto.zip"><b>Download for Mac</b></a> · <a href="https://jiyauddinsaiyad.github.io/sotto/">Website</a></p>
@@ -78,6 +78,34 @@ Sotto asks for two things, and nothing else:
 
 If the other side isn't showing up, open **System Settings → Privacy & Security → Screen & System Audio Recording**, and turn Sotto on under **System Audio Recording Only**. macOS doesn't always show the prompt on first run.
 
+## Benchmarks
+
+M4 MacBook Air (16 GB, fanless), macOS 27.0.1, medians of 5 runs. Run them yourself with the tools in [`bench/`](bench).
+
+**Language model** (Apple Foundation Models, on-device ~3B, tokens counted with Apple's tokenizer)
+
+| Workload | In | Out | First token | Prefill | Decode |
+|---|---|---|---|---|---|
+| Short answer | 11 | 33 | 0.42 s | – | 55 tok/s |
+| Long answer | 17 | 434 | 0.37 s | – | 42 tok/s |
+| Recap, 1K-token transcript | 818 | 136 | 0.79 s | 1,032 tok/s | 35 tok/s |
+| Recap, 3K-token transcript | 2,578 | 133 | 2.29 s | 1,127 tok/s | 26 tok/s |
+
+Cold start (first request after launch): 3.75 s. A hot, fanless Air ran up to ~40% slower.
+
+**Speech to text** (Apple SpeechTranscriber, LibriSpeech test-clean)
+
+| | WER | Speed | Ships with app |
+|---|---|---|---|
+| **Sotto** | **2.06%** | **49× real time** | **0 MB** |
+| Whisper Small* | 3.74% | | 466 MB |
+| Whisper Base* | 5.42% | | 142 MB |
+| Whisper Tiny* | 7.88% | | 75 MB |
+
+Ours: all 2,620 utterances, 52,576 words, 5.4 hours of audio in 6.6 minutes. *Whisper rows are a [published third-party run](https://www.developersdigest.tech/blog/apple-speechanalyzer-vs-whisper-benchmark) on an M2 Pro, not ours; it measured Apple's recognizer at 2.12%.
+
+**Footprint:** 0.8 MB download, 1.6 MB installed, ~85 MB RAM mid-meeting (the model lives in macOS, not in Sotto), 0 dependencies.
+
 ## Honest limitations
 
 Sotto runs on Apple's small (~3B parameter) on-device model. That's what makes it free and private, and it also sets the ceiling:
@@ -98,9 +126,13 @@ system audio ► SpeechTranscriber ┘
 (Core Audio process tap)
 ```
 
-Everything is Apple frameworks: `AVAudioEngine` with voice processing for the mic, a Core Audio process tap for system audio, `SpeechAnalyzer` / `SpeechTranscriber` for speech to text, and `FoundationModels` for everything the model writes. Long meetings are condensed in chunks to fit the model's ~4K-token context.
+Everything is Apple frameworks: `AVAudioEngine` with voice processing for the mic, a Core Audio process tap for system audio, `SpeechAnalyzer` / `SpeechTranscriber` for speech to text, and `FoundationModels` for everything the model writes. Long meetings are condensed in chunks to fit the model's context window (8,192 tokens on macOS 27).
 
 Five Swift files, no dependencies.
+
+## Support
+
+Sotto is free and always will be. If it saves you a subscription, [buy me a coffee](https://buymeacoffee.com/jsaiyad).
 
 ## License
 
